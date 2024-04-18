@@ -35,18 +35,24 @@
 	}
 </style>
 <body>
-	[[${session.loginStore.auth}]]
-<!-- 	<th:block th:choose="${session.loginStore.auth}">
-		<th:div th:case="관리자" th:replace="inc/header"/>
-		<th:div th:case="AS" th:replace="inc/headerAs"/>
-		<th:div th:case="매장" th:replace="inc/headerStore"/>
-	</th:block> -->
-	<th:block th:if="${session.loginStore.auth == '관리자'}" th:replace="inc/header"/>
+
+
+ 	<th:block th:switch="${session.loginStore.auth}">
+		<th:block th:case="관리자">
+			<th:block th:replace="inc/header :: headerAdmin"/>
+		</th:block>
+		<th:block th:case="AS">
+			<th:block th:replace="inc/header :: headerAs"/>
+		</th:block>
+		<th:block th:case="매장">
+			<th:block th:replace="inc/header :: headerStore"/>
+		</th:block>
+	</th:block>
+	
 	
  	<main class="container-lg mt-3 pt-5">
 		<th:block th:replace="|${templateData.cate}/${templateData.service}|"></th:block>
 	</main>
-	
-	 <span th:text="${session.loginStore}"/>
+
 </body>
 </html>
