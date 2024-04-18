@@ -1,4 +1,4 @@
-<header>
+<header th:fragment="headerAdmin">
 	<nav class="navbar bg-body-tertiary fixed-top">
 	  <div class="container-lg">
 	    
@@ -15,7 +15,7 @@
 	    	<a href="/logout" class="btn btn-sm btn-dark">로그아웃</a>
     	</div>
     	
-	    <div class="offcanvas offcanvas-start pt-5 mt-2" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+	    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
 	      <div class="offcanvas-header">
 	        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">YuRP - 본사</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -63,7 +63,7 @@
 	              </li>
 	              <li><a class="dropdown-item" href="/stock/rt/list"><b>점간이동</b></a></li>  
 	              <li><a class="dropdown-item" href="/stock/rt/list"> - 요청/승인 목록</a></li>  
-	              <li><a class="dropdown-item" href="/stock/rt/request"> - 점간이동 요청</a></li>  
+	              <!-- <li><a class="dropdown-item" href="/stock/rt/request"> - 점간이동 요청</a></li>   -->
 	            </ul>
 	          </li>
 	          <li class="nav-item dropdown">
@@ -72,7 +72,7 @@
 	            </a>
 	            <ul class="dropdown-menu">
 	              <li><a class="dropdown-item" href="storeOrder/list">매장 발주 목록</a></li>
-	              <li><a class="dropdown-item" href="storeOrder/request">매장 발주 요청</a></li>
+	              <!-- <li><a class="dropdown-item" href="storeOrder/request">매장 발주 요청</a></li> -->
 	            </ul>
 	          </li>
 	          <li class="nav-item dropdown">
@@ -96,7 +96,7 @@
 	            </a>
 	            <ul class="dropdown-menu">
 	              <li><a class="dropdown-item" href="as/list">AS 진행 현황</a></li>
-	              <li><a class="dropdown-item" href="as/store/insert">AS 등록</a></li>
+	              <!-- <li><a class="dropdown-item" href="as/store/insert">AS 등록</a></li> -->
 	            </ul>
 	          </li>
 	          
@@ -117,4 +117,160 @@
 	</nav>
 </header>
 
+
+<header th:fragment="headerAs">
+	<nav class="navbar bg-body-tertiary fixed-top">
+	  <div class="container-lg">
+	    
+	    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="d-flex gap-2 align-items-center">
+
+    		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+			  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+			  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+			</svg>
+	    	<span>[[${session.loginStore.sName}]]</span>
+	    	<a href="logout" class="btn btn-sm btn-dark">로그아웃</a>
+    	</div>
+    	
+	    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+	      <div class="offcanvas-header">
+	        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">YuRP - AS센터</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	      </div>
+	      <div class="offcanvas-body">
+	        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+	          <li class="nav-item">
+	            <a class="nav-link active" aria-current="page" href="/index">대시보드</a>
+	          </li>
+	  		  <li class="nav-item dropdown">
+	            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	              공지사항
+	            </a>
+	            <ul class="dropdown-menu">
+	              <li><a class="dropdown-item" href="/notice/list">공지사항 목록</a></li>
+	              <li><a class="dropdown-item" href="/notice/insert">공지사항 등록</a></li>
+	            </ul>
+	          </li>
+	          
+	          <li class="nav-item dropdown">
+	            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	              AS
+	            </a>
+	            <ul class="dropdown-menu">
+	              <li><a class="dropdown-item" href="as/list">AS 진행 현황</a></li>
+	              <li><a class="dropdown-item" href="as/store/insert">AS 등록</a></li>
+	            </ul>
+	          </li>
+
+	        </ul>
+
+	      </div>
+	    </div>
+	  </div>
+	</nav>
+</header>
+
+
+<header th:fragment="headerStore">
+	<nav class="navbar bg-body-tertiary fixed-top">
+	  <div class="container-lg">
+	    
+	    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="d-flex gap-2 align-items-center">
+
+    		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+			  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+			  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+			</svg>
+	    	<span>[[${session.loginStore.sName}]]</span>
+	    	<a href="logout" class="btn btn-sm btn-dark">로그아웃</a>
+    	</div>
+    	
+	    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+	      <div class="offcanvas-header">
+	        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">YuRP - 매장</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	      </div>
+	      <div class="offcanvas-body">
+	        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+	          <li class="nav-item">
+	            <a class="nav-link active" aria-current="page" href="/index">대시보드</a>
+	          </li>
+	  		  <li class="nav-item dropdown">
+	            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	              공지사항
+	            </a>
+	            <ul class="dropdown-menu">
+	              <li><a class="dropdown-item" href="/notice/list">공지사항 목록</a></li>
+	             <!--  <li><a class="dropdown-item" href="/notice/insert">공지사항 등록</a></li> -->
+	            </ul>
+	          </li>
+	          <li class="nav-item dropdown">
+	            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	              재고 관리
+	            </a>
+	            <ul class="dropdown-menu">
+	              <li><a class="dropdown-item" href="/stock/sales/list"><b>상품판매현황</b></a></li>
+	              <li><a class="dropdown-item" href="/stock/sales/list"> - 상품판매현황 목록</a></li>  
+	              <li>
+	                <hr class="dropdown-divider">
+	              </li>
+	              <li><a class="dropdown-item" href="/stock/inven/list"><b>재고 조회</b></a></li>
+	              <li><a class="dropdown-item" href="/stock/inven/list"> - 재고 목록</a></li>  
+	              <li>
+	                <hr class="dropdown-divider">
+	              </li>
+	              <li><a class="dropdown-item" href="/stock/inandout/list"><b>입/출고 관리</b></a></li>
+	              <li><a class="dropdown-item" href="/stock/inandout/list"> - 입/출고 목록</a></li>  
+	              <li><a class="dropdown-item" href="/stock/inandout/insert"> - 출고 등록</a></li> 
+<!-- 	              <li>
+	                <hr class="dropdown-divider">
+	              </li>
+	              <li><a class="dropdown-item" href="/stock/product/list"><b>상품 관리</b></a></li>  
+	              <li><a class="dropdown-item" href="/stock/product/list"> - 상품 목록</a></li>  
+	              <li><a class="dropdown-item" href="/stock/product/insert"> - 상품 등록</a></li>  --> 
+	              <li>
+	                <hr class="dropdown-divider">
+	              </li>
+	              <li><a class="dropdown-item" href="/stock/rt/list"><b>점간이동</b></a></li>  
+	              <li><a class="dropdown-item" href="/stock/rt/list"> - 요청/승인 목록</a></li>  
+	              <li><a class="dropdown-item" href="/stock/rt/request"> - 점간이동 요청</a></li>  
+	            </ul>
+	          </li>
+	          <li class="nav-item dropdown">
+	            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	              매장 수주/발주 
+	            </a>
+	            <ul class="dropdown-menu">
+	              <li><a class="dropdown-item" href="storeOrder/list">매장 발주 목록</a></li>
+	              <li><a class="dropdown-item" href="storeOrder/request">매장 발주 요청</a></li>
+	            </ul>
+	          </li>
+
+	          <li class="nav-item dropdown">
+	            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	              AS
+	            </a>
+	            <ul class="dropdown-menu">
+	              <li><a class="dropdown-item" href="as/list">AS 진행 현황</a></li>
+	              <li><a class="dropdown-item" href="as/store/insert">AS 등록</a></li>
+	            </ul>
+	          </li>
+	          
+
+	        </ul>
+
+	      </div>
+	    </div>
+	  </div>
+	</nav>
+</header>
+
+
+<!--  rrr-->
 
