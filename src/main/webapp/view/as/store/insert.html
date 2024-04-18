@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>	
+	$(function(){
+		
+		$('#sCodeSearch').on("click",function(e){
+			
+			e.preventDefault();
+			let popUrl = "../store/sCodeSearch";
+			let popOption = "width = 650px, height=550px, top=300px, left=300px, scrollbars=yes";
+			
+			window.open(popUrl,"매장",popOption);
+			
+		});
+		
+		$('#pCodeSearch').on("click",function(e){
+			
+			e.preventDefault();
+			let popUrl = "../store/pCodeSearch";
+			let popOption = "width = 650px, height=550px, top=300px, left=300px, scrollbars=yes";
+			
+			window.open(popUrl,"품번",popOption);
+			
+		});
+		
+		
+		$("#ok").click(function() {
+			var essential = document.getElementsByClassName("essential");
+			var ee = true;
+			
+			for (var i = 0; i < essential.length; i++) {
+				if(!essential[i].value){
+					ee = false;
+					break;
+				}
+			}
+			
+			if (!ee) {
+				alert('모두 작성해주세요.')
+				return false;
+			}else{
+				return true;
+			}
+		});
+	})
+</script>
+</head>
+<body>
+<h1>as 매장추가</h1>
+<form action="" method="post" th:object="${dto}">
+
+	<table border="">
+		<thead>
+		  <colgroup>
+		    <col width="30%" />
+		    <col width="70%" />
+		  </colgroup>
+		  
+		   <h1>고객 정보</h1>
+			   	<tr>
+					<th>고객명</th>
+					<td><input class="essential" id="asName" type="text" name="asName"/></td>
+				</tr>
+				<tr>
+					<th>고객연락처</th>
+					<td><input class="essential" id="asTel" type="text" name="asTel"/></td>
+				</tr>
+				<tr>
+					<th>구매날짜</th>
+					<td><input class="essential" id="purDate" type="date" name="purDate"/></td>
+				</tr>
+				<tr>
+					<th>의뢰내용</th>
+					<td><textarea class="essential" id="asNote" rows="5" cols="50" name="asNote"></textarea></td>
+				</tr>
+		 </thead>
+	</table>
+
+
+
+	<table border="">
+		<thead>
+		  <colgroup>
+		    <col width="30%" />
+		    <col width="70%" />
+		  </colgroup>
+
+		 	<h1>접수 등록</h1>
+			<tr>
+				<th>접수번호</th>
+				<td><input id="asNuber" type="text" name="asNum" th:field="${dto.asNum}" readonly /></td>
+			</tr>
+			<tr>
+				<th>매장코드</th>
+				<td><input class="essential" id="storeCode" type="text" name="sCode"/><button id="sCodeSearch">조회</button></td>
+			</tr>
+			<tr>
+				<th>매장명</th>
+				<td><input class="essential" id="storeName" type="text" name="sName"/></td>
+			</tr>
+			<tr>
+				<th>상품코드</th>
+				<td><input class="essential" id="productCode" type="text" name="pCode"/><button id="pCodeSearch">조회</button></td>
+			</tr>
+			<tr>
+				<th>상품명</th>
+				<td><input class="essential" id="productName" type="text" name="pName"/></td>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2" align="right">
+					<input type="submit" value="접수" id="ok"/>
+					<a href="/as/list">취소</a>
+				</td>
+			</tr>
+		</thead>
+	</table>
+</form>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+	$(function() {
+		$("#no").click(function() {
+			if (confirm('삭제하시겠습니까?')) {
+				document.location.href = '/notice/list';
+			} else {
+				return false;
+			}
+		});
+	});
+</script>
+</head>
+<body>
+공지 디테일
+
+<table border="">
+	<thead>
+	  <colgroup>
+	    <col width="10%" />
+	    <col width="10%" />
+	    <col width="10%" />
+	    <col width="20%" />
+	    <col width="10%" />
+	    <col width="20%" />
+	  </colgroup>
+	  
+		<tr>
+			<th>NO</th>
+			<td th:text="${dto.nNo}"></a></td>
+			<th>제목</th>
+			<td th:text="${dto.title}"></a></td>
+			<th>작성일</th>
+			<td th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></td>
+		</tr>
+		<tr>
+			<th>본문</th>
+			<td colspan="5" th:if="${dto.file} != ''">
+				<img th:src="@{/view/notice/fff/}+${dto.file}" style="padding:10%;" width="500px"/>
+				<p align="center">[[${dto.content}]]</p>
+			</td>
+			
+			<td colspan="5" th:if="${dto.file} == ''">
+				<p align="center">[[${dto.content}]]</p>
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="6" align="right" th:if="${login.sCode} == 'admin'">
+				<a th:href="@{|/notice/modify/${dto.nNo}|}">수정</a>
+				<a th:href="@{|/notice/delete/${dto.nNo}|}" id="no">삭제</a>
+				<a href="/notice/list">목록으로</a>
+			</td>
+
+			<td colspan="6" align="right" th:if="${login.sCode} != 'admin'">
+				<a href="/notice/list">목록으로</a>
+			</td>
+		</tr>
+	</thead>
+</table>
+</body>
+</html>

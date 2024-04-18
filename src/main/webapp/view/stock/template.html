@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<title>YuRP</title>
+</head>
+<body>
+	
+	<th:block th:replace="inc/header"/>
+	
+	
+ 	<main class="container-lg mt-3 pt-5">
+		<th:block th:replace="|${templateData.dir}/${templateData.service}|"></th:block>
+	</main>
+	
+<!-- 	<th:block th:replace="inc/footer"/> -->
+	
+<!-- 	<div onclick="aaa()">aaa</div>
+	<h2>stock용 Temp</h2>
+	[[${templateData}]] -->
+</body>
+</html>

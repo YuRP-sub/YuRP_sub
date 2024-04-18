@@ -1,0 +1,221 @@
+
+<script>
+	$(function(){
+
+	})
+	
+	function getCode(n){
+		var pCode = '';
+		n.value= n.value.toUpperCase();
+		console.log('----------', $(n).val())
+		var row = $(n).parents('.dataRow');
+		var target = row.find('input[name*=pCode]');
+		var pNum = row.find('input[name*=pNum]').val();
+		var color = row.find('input[name*=color]').val();
+		var pSize = row.find('input[name*=pSize]').val();
+		var season = row.find('input[name*=season]').val();
+		
+		pNum = pNum.toUpperCase();
+		color = color.toUpperCase();
+		pSize = pSize.toUpperCase();
+		season = season.toUpperCase();
+		
+		
+		pCode = pNum+color+pSize;
+		
+		console.log(season , pNum , pCode)
+		target.val(pCode);
+		pCode = '';
+	}
+	
+	function getPrice(n){
+		var pPrice = '';
+		var row = $(n).parents('.dataRow');
+		var target = row.find('input[name*=pPrice]');
+		var liPrice = Number(row.find('input[name*=liPrice]').val());
+		var discount = Number(row.find('input[name*=discount]').val());
+		var pre = liPrice - (liPrice*discount/100);
+		
+		pPrice = Math.floor((pre/100))*100;
+		
+		target.val(pPrice);
+		
+	}
+	
+	
+	function addRow(){
+		var cnt = totCnt();
+		console.log(cnt ,'-----')
+		var addData = `
+		<tr class="dataRow">
+	 		<td><div class="btn btn-sm btn-danger" onclick="delRow(this);">지우기</div></td>
+	 		<td>
+	 			<select class="form-select" name="prodArr[${cnt}].bCode" required>
+		             <option value="" selected disabled hidden>브랜드 선택</option>
+	                 <option value="117901">브랜드1</option>
+	                 <option value="117902">브랜드2</option>
+	                 <option value="117903">브랜드3</option>
+		         </select>
+	 		</td>
+	 		<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].season" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+			</td>
+			<td>
+				<select class="form-select" name="prodArr[${cnt}].grade" required>
+		             <option value="0" selected>일반</option>
+		             <option value="1">스페셜</option>
+		         </select>
+			</td>
+			
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].pName" required />
+			</td>
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].pNum" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+			</td>
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].color" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+			</td>
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].pSize" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+			</td>
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].pCode" onKeyup="getCode(this);" readonly required />
+			</td>
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].liPrice" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
+			</td>
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].discount" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
+			</td>
+			<td>
+				<input type="text" class="form-control" name="prodArr[${cnt}].pPrice" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" readonly required />
+			</td>
+		</tr>
+		`;
+
+
+		$('#dataBody').append(addData);
+		totCnt();
+		
+	}
+	
+	function delRow(del){
+		var row = $(del).parents('.dataRow');
+		row.remove();
+		totCnt();
+	}
+	
+	function totCnt(){
+		var tot = $('.dataRow').length;
+		$('#rowCnt').text(tot);
+		return tot;
+	}
+</script>
+
+<h2>상품 등록</h2>
+
+<section>
+	<form action="insertReg" method="post">
+		<div class="tableBox mb-3">
+			<table class="table table-striped-columns">
+				<colgroup>
+					<col style="min-width:80px;"/>
+					<col style="min-width:150px;"/>
+					<col style="min-width:100px;"/>
+					<col style="min-width:120px;"/>
+					<col style="min-width:200px;"/>
+					<col style="min-width:150px;"/>
+					<col style="min-width:80px;"/>
+					<col style="min-width:80px;"/>
+					<col style="min-width:200px;"/>
+					<col style="min-width:120px;"/>
+					<col style="min-width:80px;"/>
+					<col style="min-width:120px;"/>
+
+				</colgroup>
+				<thead>
+					<tr class="table-dark top">
+						<td></td>
+						<td>브랜드</td>
+						<td>시즌</td>
+						<td>상품등급</td>
+						<td>상품명</td>
+						<td>품번</td>
+						<td>컬러</td>
+						<td>사이즈</td>
+						<td>상품코드</td>
+						<td>정가</td>
+						<td>할인율</td>
+						<td>판매가</td>
+
+					</tr>
+				</thead>
+				<tbody id="dataBody">
+					<tr class="dataRow">
+				 		<td><div class="btn btn-sm btn-danger" style="visibility:hidden;">지우기</div></td>
+				 		<td>
+				 			<select class="form-select" th:name="|prodArr[0].bCode|" required>
+					             <option value="" selected disabled hidden>브랜드 선택</option>
+				                 <option value="117901">브랜드1</option>
+				                 <option value="117902">브랜드2</option>
+				                 <option value="117903">브랜드3</option>
+					         </select>
+				 		</td>
+				 		<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].season|" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+						</td>
+						<td>
+							<select class="form-select" th:name="|prodArr[0].grade|" required>
+					             <option value="0" selected>일반</option>
+					             <option value="1">스페셜</option>
+					         </select>
+						</td>
+						
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].pName|" required />
+						</td>
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].pNum|" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+						</td>
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].color|" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+						</td>
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].pSize|" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
+						</td>
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].pCode|" onKeyup="getCode(this);" readonly required />
+						</td>
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].liPrice|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
+						</td>
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].discount|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
+						</td>
+						<td>
+							<input type="text" class="form-control" th:name="|prodArr[0].pPrice|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" readonly required />
+						</td>
+					</tr>
+
+				</tbody>
+
+			</table>
+		</div>
+		<div class="row justify-content-between align-items-center">	
+			
+			<div class="col-auto mb-3">								
+						
+					<a href="list" class="btn btn-dark">목록으로 </a>	
+			</div>
+			<div class="col-auto mb-3">								
+					<div id="addBtn" class="btn btn-success" onclick="addRow();">상품추가</div>	
+					<button type="submit" class="btn btn-primary">상품등록 <span id="rowCnt" class="badge text-bg-secondary">1</span></button>
+			</div>
+		</div>
+	</form>
+	
+</section>
+
+
+</body>

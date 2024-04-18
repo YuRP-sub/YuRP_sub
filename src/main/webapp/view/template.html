@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<title>YuRP</title>
+</head>
+<style>	
+	input[type="checkbox"]{
+		cursor: pointer;
+	}
+	section {
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+	.tableBox {
+		width: 100%;
+		max-height: 600px;
+		overflow: auto;
+		text-align:center;
+	}
+	.table > thead{
+		position: sticky;
+		top:0;
+	}
+	
+	.table > tfoot{
+		position: sticky;
+		bottom: -1px;
+	}
+</style>
+<body>
+	[[${session.loginStore.auth}]]
+<!-- 	<th:block th:choose="${session.loginStore.auth}">
+		<th:div th:case="관리자" th:replace="inc/header"/>
+		<th:div th:case="AS" th:replace="inc/headerAs"/>
+		<th:div th:case="매장" th:replace="inc/headerStore"/>
+	</th:block> -->
+	<th:block th:if="${session.loginStore.auth == '관리자'}" th:replace="inc/header"/>
+	
+ 	<main class="container-lg mt-3 pt-5">
+		<th:block th:replace="|${templateData.cate}/${templateData.service}|"></th:block>
+	</main>
+	
+	 <span th:text="${session.loginStore}"/>
+</body>
+</html>

@@ -1,0 +1,21 @@
+server:
+  port: 80
+
+spring:
+  thymeleaf:
+    prefix: /view/
+    suffix: .html
+    cache: false  
+    
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url : jdbc:mariadb://localhost:3306/yurp_db?allowMultiQueries=true
+    username : yurp
+    password : 123456  
+    
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    
+    

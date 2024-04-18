@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<style>
+ 	section {
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+	.scr{
+		border: 1px solid #fff;
+		width: 1200px;
+		height: 450px;
+		overflow-y: scroll;
+	}
+	.tableBox {
+		width: 100%;
+		max-height: 600px;
+		overflow: auto;
+	}
+	.table > thead{
+		position: sticky;
+		top:0;
+	}
+	
+	.table > tfoot{
+		position: sticky;
+		bottom: -1px;
+	}
+
+</style>
+<title>YuRP</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+$(function(){
+    $("#btn").on("click",function(){
+    
+    	var arr = [];
+    	
+        $("tbody tr").each(function(i){
+            var tr = $(this);
+            var reqCntValue = tr.find("input[id='reqCnt']").val();
+            if (reqCntValue !== "") {
+                var obj = {
+                    iNo: tr.find("input[id='iNo']").val(),
+                    bCode: tr.find("td[id='bCode']").text(),
+                    pNum: tr.find("td[id='pNum']").text(),
+                    color: tr.find("td[id='color']").text(),
+                    pSize: tr.find("td[id='pSize']").text(),
+                    liPrice: tr.find("td[id='liPrice']").text(),
+                    pName: tr.find("td[id='pName']").text(),
+                    storeCnt: tr.find("td[id='storeCnt']").text(),
+                    inCnt: tr.find("td[id='inCnt']").text(),
+                    reqCnt: reqCntValue 
+                };
+                arr.push(obj);
+            }
+        });
+        // 부모 함수 호출
+        window.opener.setList(arr);
+        window.close();
+    });
+    
+    $(document).ready(function(){
+        // bCode 값을 가져와서 hidden input 필드에 설정
+        var sName = $("#sNameValue").text();
+        $("#sNameInput").val(sName);
+    });
+});
+
+</script>
+<body>
+<h1>등록할 때 상품 추가 페이지</h1>
+
+<section>
+<form action="">
+	<div class="searchBox container mb-3 border-bottom">
+		<div class="row g-3 align-items-center">	
+			<div class="col-md-auto">			
+					<div class="input-group">
+						<span class="input-group-text">요청매장</span>
+						<span th:text="${sName}" id="sNameValue" class="form-control"></span>
+						<input type="hidden" id="sNameInput" name="sName" th:value=${sName}/>
+					</div>
+				</div>	
+			<div class="col-md-auto">	
+					<div class="input-group">
+						<span class="input-group-text">브랜드</span>
+						<select class="form-select" name="bCode">
+	                        <option value="" selected disabled hidden>브랜드 선택</option>
+	                        <option th:each="brand : ${blist}" th:text="|${brand.bName} [${brand.bCode}]|" th:value="${brand.bCode}"></option>
+	                    </select>
+					</div>			
+				</div>
+			<div class="col-md-auto">				
+				<div class="input-group">
+					<span class="input-group-text">품번</span>
+					<input type="text" class="form-control" name="pNumChk" placeholder="품번 입력"/>
+				</div>
+			</div>										
+		</div>
+		<div class="row justify-content-end align-items-center">
+			<div class="col-auto mb-3">				
+				<div class="input-group">
+					<input class="btn btn-dark" type="submit" value="검색"/>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="tableBox mb-3">
+		<table class="table table-striped-columns">
+			<colgroup>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+			</colgroup>
+			<thead>
+				<tr class="table-dark">
+					<td>번호</td>
+					<td>브랜드</td> <!-- 브랜드 선택할거니 그 브랜드만 나오게 -->
+					<td>품번</td>
+					<td>컬러</td>
+					<td>사이즈</td>
+					<td>가격</td>
+					<td>품명</td>
+					<td>매장재고</td>
+					<td>타점재고</td>
+					<td>요청수량</td>
+				</tr>
+			</thead>
+			<tbody>
+			 	  <tr th:each="prod : ${prod}">
+					<td th:text="${prodStat.index+1}"></td>
+				 	<input type="hidden" id="iNo" th:value="${prod.iNo}"/>
+					<td id="bCode" th:value="${prod.bCode}" th:text="${prod.bCode}"></td>
+	                <td id="pNum" th:value="${prod.pNum}" th:text="${prod.pNum}"></td>
+	                <td id="color" th:value="${prod.color}" th:text="${prod.color}"></td>
+	                <td id="pSize"  th:value="${prod.pSize}" th:text="${prod.pSize}"></td>
+	                <td id="liPrice" th:value="${prod.liPrice}" th:text="${prod.liPrice}"></td>
+	                <td id="pName"  th:value="${prod.pName}" th:text="${prod.pName}"></td>
+	                <td id="storeCnt"  th:value="${prod.storeCnt}" th:text="${prod.storeCnt}"></td>
+	                 <td id="inCnt"  th:value="${prod.inCnt}" th:text="${prod.inCnt}"></td>
+	                <td>
+	                     <input id="reqCnt" class="reqCnt"  type="number" style="width:80%;"/>
+	                 </td>
+				</tr> 			
+			</tbody>
+		</table>
+	</div>
+	</form>
+</section>
+<div>
+	<div class="row justify-content-between align-items-center">
+		<div class="col-auto mb-3">		
+				<input type="button" id="btn" class="btn btn-primary" value="상품추가">		
+		</div>
+	</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+
+</html>

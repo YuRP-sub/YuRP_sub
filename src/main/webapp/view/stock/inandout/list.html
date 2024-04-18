@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>입출고</title>
+</head>
+<style>
+ 	section {
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+	.scr{
+		border: 1px solid #fff;
+		width: 1200px;
+		height: 450px;
+		overflow-y: scroll;
+	}
+	.tableBox {
+		width: 100%;
+		max-height: 600px;
+		overflow: auto;
+	}
+	.table > thead{
+		position: sticky;
+		top:0;
+	}
+	
+	.table > tfoot{
+		position: sticky;
+		bottom: -1px;
+	}
+
+</style>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+$(function(){
+	let openWin;
+	
+	$('#sNameSearch').on("click",function(e){
+		
+		e.preventDefault();
+		let popUrl = "../sales/sNameSearch";
+		let popOption = "width = 650px, height=550px, top=300px, left=300px, scrollbars=yes";
+		
+		window.open(popUrl,"매장",popOption);
+		
+	});
+
+	$("#list tr").on("click",function(e){
+		var row = $(this);
+		var rowData = row.find('td').map(function(){
+			return $(this).text();
+		}).get()[2];
+		console.log(rowData);
+		
+		e.preventDefault();
+		let popUrl = "../inandout/detail?search="+rowData;
+		let popOption = "width = 1000px, height=550px, top=300px, left=300px, scrollbars=yes";
+		openWin = window.open(popUrl,"전표상세",popOption); 
+		//openWin.opener.rowData = rowData;
+		
+	});
+
+	
+})
+
+</script>
+<body>
+<h1>입출고</h1>
+<section>
+<form action="">
+	<div class="searchBox container mb-3 border-bottom">
+		<div class="row g-3 align-items-center">		
+			<div class="col-md-auto">			
+				<div class="input-group">
+					<span class="input-group-text">입출고날짜</span>
+					<input type="date" class="form-control" name="sday">
+					<div class="px-2"> ~ </div> 
+					<input type="date" class="form-control" name="eday">
+				</div>
+			</div>
+			<div class="col-md-auto">				
+				<div class="input-group">
+					<span class="input-group-text">전표번호</span>
+					<input id="ioStat" type="text" class="form-control" name="ioStat" placeholder="전표번호 입력"/>
+				</div>
+			</div>
+			<div class="col-md-auto">			
+				<div class="input-group">
+					<span class="input-group-text">입출고</span>
+						<select class="form-select" name="type1">
+	                        <option value="" selected disabled hidden>입출고 선택</option>
+	                        <option value="입고">입고</option>
+	                        <option value="출고">출고</option>
+	                    </select>
+				</div>
+			</div>				
+			<div class="col-md-auto">			
+				<div class="input-group">
+					<span class="input-group-text">처리여부</span>
+						<select class="form-select" name="rStat">
+	                        <option value="" selected disabled hidden>처리여부 선택</option>
+	                        <option value="처리">처리</option>
+	                        <option value="미처리">미처리</option>
+	                    </select>
+				</div>
+			</div>			
+			<div class="col-md-auto">				
+				<div class="input-group">
+					<span class="input-group-text">매장명</span>
+					<input id="storeNm" type="text" class="form-control" name="sName" placeholder="매장명 입력"/>
+					<div id="sNameSearch" class="btn btn-outline-secondary" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+					  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+					</svg></div>
+				</div>
+			</div>						
+		</div>
+		<div class="row justify-content-end align-items-center">
+			<div class="col-auto mb-3">				
+				<div class="input-group">
+					<input class="btn btn-dark" type="submit" value="검색"/>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="tableBox mb-3">
+		<table id="list" class="table table-striped-columns">
+			<colgroup>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+			</colgroup>
+			<thead>
+				<tr class="table-dark">
+					<td>번호</td>
+					<td>등록날짜</td>
+					<td>전표번호</td>
+					<td>입출고</td>
+					<td>상태</td>
+					<td>출발매장</td>
+					<td>도착매장</td>
+					<td>총수량</td>
+					<td>총액</td>
+					<td>처리여부</td>
+				</tr>
+			</thead>
+			<tbody>
+			 	<tr th:each="dto : ${inandoutData}" >
+					<td th:text="${dto.ioNo}"></td>
+					<td th:text="${dto.regDate}"></td>
+					<td th:text="${dto.ioStat}"></td>
+					<td th:text="${dto.type1}"></td>
+					<td th:text="${dto.type2}"></td>
+					<td th:text="${dto.start}"></td>
+					<td th:text="${dto.arrival}"></td>
+					<td th:text="${dto.totCnt}"></td>
+					<td th:text="${#numbers.formatInteger(dto.totPrice, 3, 'COMMA')}"></td>
+					<td th:text="${dto.rStat}"></td>
+				</tr> 
+			</tbody>
+			<tfoot class="table-group-divider">
+				<tr class="tot table-secondary" th:each="dto2 : ${totData}">
+					<td>통계</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td th:text="${dto2.totCnt}"></td>
+					<td th:text="${#numbers.formatInteger(dto2.totPrice, 3, 'COMMA')}"></td>
+					<td></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	</form>
+</section>
+
+</body>
+</html>

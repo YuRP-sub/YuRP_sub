@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<style>	
+	section {
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+	.scr{
+		border: 1px solid #fff;
+		width: 1200px;
+		height: 450px;
+		overflow-y: scroll;
+	}
+	.tableBox {
+		width: 100%;
+		max-height: 600px;
+		overflow: auto;
+	}
+	.table > thead{
+		position: sticky;
+		top:0;
+	}
+	
+	.table > tfoot{
+		position: sticky;
+		bottom: -1px;
+	}
+
+</style>
+
+<body>
+<h1>as 목록</h1>
+
+
+<section>
+	<form action="">
+	
+		<!-- 검색창은 이런식으로?  -->
+		<div class="searchBox container mb-3 border-bottom">
+			<div class="row g-3 align-items-center">		
+				<div class="col-md-auto">			
+					<div class="input-group">
+						<span class="input-group-text">기간</span>
+						<input type="date" class="form-control" name="start"> 
+						<div class="px-2"> ~ </div> 
+						<input type="date" class="form-control" name="end">
+					</div>
+				</div>
+				<div class="col-md-auto">			
+					<div class="input-group">
+						<span class="input-group-text">매장</span>
+						<select class="form-select" name="sName">
+	                        <option value="" selected disabled hidden>매장 선택</option>
+	                        <option th:each="ss : *{sNames}" th:value="${ss.sName}" th:text="${ss.sName}"/>
+	                    </select>
+					</div>
+				</div>
+				<div class="col-md-auto">			
+					<div class="input-group">
+						<span class="input-group-text">처리결과</span>
+						<select class="form-select" name="asRes">
+	                        <option value="" selected disabled hidden>처리결과 선택</option>
+	                        <option>수선전</option>
+	                        <option>수선완료</option>
+	                        <option>수선불가</option>
+	                    </select>
+					</div>
+				</div>
+				<div class="col-md-auto">			
+					<div class="input-group">
+						<span class="input-group-text">진행현황</span>
+						<select class="form-select" name="asProg">
+	                        <option value="" selected disabled hidden>진행현황 선택</option>
+	                        <option>수선등록</option>
+	                        <option>수선중</option>
+	                        <option>수선후발송</option>
+	                        <option>수선종료</option>
+	                    </select>
+					</div>
+				</div>				
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">접수번호</span>
+						<input type="number" class="form-control" name="asNum" placeholder="접수번호 입력"/>
+						<div class="btn btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+						  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+						</svg></div>
+					</div>
+				</div>											
+			</div>
+			<div class="row justify-content-end align-items-center">
+				<div class="col-auto mb-3">				
+					<div class="input-group">
+						<input class="btn btn-dark" type="submit" value="검색"/>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	
+	<!-- 테이블은 이런식으로?  -->
+	<div class="tableBox mb-3">
+		<table class="table table-striped-columns">
+			<colgroup>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+			</colgroup>
+			<thead>
+				<tr class="table-dark top">
+					<th>NO</th>
+					<th>접수번호</th>
+					<th>접수매장</th>
+					<th>접수날짜</th>
+					<th>처리결과</th>
+					<th>진행여부</th>
+				</tr>
+			</thead>
+			<tbody>		
+				<tr th:each="dto : ${aList}">
+					<td th:text="${dtoStat.size - dtoStat.index}"></td><!-- 숫자 역순으로 뽑기 위해! -->
+					<td><a th:href="@{|detail/${dto.aNo}|}" th:text="${dto.asNum}"></a></td>
+					<td th:text="${dto.sName}"></td>
+					<td th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></td>
+					<td th:text="${dto.asRes}"></td>
+					<td th:text="${dto.asProg}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="row justify-content-end align-items-center">
+		<div class="col-auto mb-3" th:if="${login.sCode} == 'as' or ${login.sCode} == 'admin'">						
+				<a href="/" class="btn btn-dark">뒤로가기</a>	
+		</div>
+
+		<div class="col-auto mb-3" th:if="${login.sCode} != 'as' and ${login.sCode} != 'admin'">				
+				<a href="/as/store/insert" class="btn btn-dark">접수</a>	
+				<a href="/" class="btn btn-dark">뒤로가기</a>	
+		</div>
+	</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<title>품번 검색</title>
+</head>
+<style>
+ 	section {
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+	.scr{
+		border: 1px solid #fff;
+		width: 1200px;
+		height: 450px;
+		overflow-y: scroll;
+	}
+	.tableBox {
+		width: 100%;
+		max-height: 600px;
+		overflow: auto;
+	}
+	.table > thead{
+		position: sticky;
+		top:0;
+	}
+	
+	.table > tfoot{
+		position: sticky;
+		bottom: -1px;
+	}
+
+</style>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+$(function(){
+	$("#data tr").on("click",function(){
+		var row = $(this);
+		var rowData = row.find('td').map(function(){
+			return $(this).text();
+		}).get()[1];
+		console.log(rowData);
+		window.opener.document.getElementById("productNum").value = rowData;
+		window.close();
+	});
+	
+
+})
+</script>
+<body>
+<h1>pNumSearch</h1>
+<section>
+<form action="">
+	<div class="searchBox container mb-3 border-bottom">
+		<div class="row g-3 align-items-center">		
+			<div class="col-md-auto">				
+				<div class="input-group">
+					<span class="input-group-text">상품명</span>
+					<input type="text" class="form-control" name="pName" placeholder="상품명 입력"/>
+				</div>
+			</div>
+			<div class="col-md-auto">				
+				<div class="input-group">
+					<span class="input-group-text">품번</span>
+					<input type="text" class="form-control" name="pNum" placeholder="품번 입력"/>
+				</div>
+			</div>						
+			<div class="col-md-auto">				
+				<div class="input-group">
+					<span class="input-group-text">시즌</span>
+					<input type="text" class="form-control" name="season" placeholder="시즌 입력"/>
+				</div>
+			</div>											
+		</div>
+		<div class="row justify-content-end align-items-center">
+			<div class="col-auto mb-3">				
+				<div class="input-group">
+					<input class="btn btn-dark" type="submit" value="검색"/>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="tableBox mb-3">
+		<table id="data" class="table table-striped-columns">
+			<colgroup>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+			</colgroup>
+			<thead>
+				<tr class="table-dark">
+					<td>번호</td>
+					<td>품번</td>
+					<td>상품명</td>
+					<td>시즌</td>
+					<td>원가</td>
+					<td>할인율</td>
+					<td>가격</td>
+				</tr>
+			</thead>
+			<tbody>
+			 	<tr th:each="dto : ${mainData}" >
+					<td th:text="${dto.pNo}"></td>
+					<td th:value="${dto.pNum}" th:text="${dto.pNum}"></td>
+					<td th:text="${dto.pName}"></td>
+					<td th:text="${dto.season}"></td>
+					<td th:text="${dto.liPrice}"></td>
+					<td th:text="${dto.discount}"></td>
+					<td th:text="${dto.pPrice}"></td>
+				</tr> 
+			</tbody>
+		</table>
+	</div>
+	</form>
+</section>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

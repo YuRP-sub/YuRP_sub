@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>YuRP</title>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- <th:block th:replace="inc/header"/> -->
+
+
+	<section class="container-fluid m-auto row justify-content-center align-items-center" style="height: 100vh;">
+		<div class="col" style="max-width:300px">
+			<form action="dashboard" method="post">
+			  <div class="mb-3">
+			    <label for="sCode" class="form-label">매장코드</label>
+			    <input type="text" class="form-control" id="sCode" name="sCode" aria-describedby="emailHelp">
+			    
+			  </div>
+			  <div class="mb-3">
+			    <label for="sPw" class="form-label">패스워드</label>
+			    <input type="password" class="form-control" id="sPw" name="sPw">
+			  </div>
+ 		      <div class="form-text text-center mb-2">매장코드 및 패스워드 망실시<br/> 본사문의 (02-000-0000)</div>
+			  <div class="row justify-content-center">
+				  <button type="submit" class="btn btn-primary col-3">로그인</button>
+			  </div>
+			</form>
+		</div>
+		
+	</section>
+</body>
+</html>

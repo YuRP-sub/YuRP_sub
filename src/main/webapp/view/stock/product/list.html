@@ -1,0 +1,155 @@
+
+<style>	
+	input[type="checkbox"]{
+		cursor: pointer;
+	}
+	section {
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+	.tableBox {
+		width: 100%;
+		max-height: 600px;
+		overflow: auto;
+		text-align:center;
+	}
+	.table > thead{
+		position: sticky;
+		top:0;
+	}
+	
+	.table > tfoot{
+		position: sticky;
+		bottom: -1px;
+	}
+</style>
+<body>
+
+<section class="container-lg">
+	<h2 class="title row mt-5 mb-5 p-2 justify-content-center">상품 목록</h2>
+
+	<form action="" method="post">
+
+		<div class="searchBox container mb-3 border-bottom">
+			<div class="row g-3 mb-3 justify-content-evenly align-items-center">		
+				<div class="col-md-auto">			
+					<div class="input-group">
+						<span class="input-group-text">시즌</span>
+						<select class="form-select" name="season">
+	                        <option value="" selected disabled hidden>시즌 선택</option>
+	                        <option th:each="season:${seasonData}" th:value="${season}" th:text="${season}">
+
+	                    </select>
+					</div>
+				</div>
+				<div class="col-md-auto">			
+					<div class="input-group">
+						<span class="input-group-text">브랜드</span>
+						<select class="form-select" name="bCode">
+	                        <option value="" selected disabled hidden>브랜드 선택</option>
+	                        <option th:each="bd:${brandData}" th:value="${bd.bCode}" th:text="${bd.bName}">
+
+	                    </select>
+					</div>
+				</div>
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">상품명</span>
+						<input type="text" class="form-control" name="pName" placeholder="상품명 입력"/>
+						<button class="btn btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+						  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+						</svg></button>
+					</div>
+				</div>
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">품번</span>
+						<input type="text" class="form-control" name="pCode" placeholder="품번 또는 상품코드 입력"/>
+						<button class="btn btn-outline-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+						  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+						</svg></button>
+					</div>
+				</div>						
+						
+			</div>
+			<div class="row justify-content-end align-items-center">
+				<div class="col-auto mb-3">				
+					<div class="input-group">
+						<input class="btn btn-dark" type="submit" value="검색"/>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	
+	<!-- 테이블은 이런식으로?  -->
+	<form action="" method="post">
+	<div class="tableBox mb-3">
+		<table class="table table-striped-columns">
+			<colgroup>
+				<col style="min-width:80px; width: 5%;"/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+			</colgroup>
+			<thead>
+				<tr class="table-dark top">
+					<td><input class="form-check-input border-secondary-subtle" type="checkbox" id="selectAll" value="" aria-label="..."></td>
+					<td>시즌</td>
+					<td>브랜드</td>
+					<td>상품등급</td>
+					<td>상품명</td>
+					<td>품번</td>
+					<td>컬러</td>
+					<td>사이즈</td>
+					<td>상품코드</td>
+					<td>정가</td>
+					<td>할인율</td>
+					<td>판매가</td>
+				</tr>
+			</thead>
+			<tbody>		
+			 	<tr th:each="dto : ${productData}" >
+			 		<td><input class="form-check-input border-secondary-subtle" type="checkbox"  th:name="|prodArr[${dtoStat.index}].pNo|" th:value="${dto.pNo}" aria-label="..."></td>
+					<td th:text="${dto.season}"/>
+					<td th:text="${dto.bName}"/>
+					<td th:text="${dto.grade} ? '스페셜':'일반'"/>
+					<td th:text="${dto.pName}"/>
+					<td th:text="${dto.pNum}"/>
+					<td th:text="${dto.color}"/>
+					<td th:text="${dto.pSize}"/>
+					<td th:text="${dto.pCode}"/>
+					<td th:text="|${#numbers.formatInteger(dto.liPrice, 0, 'COMMA')}|"/>
+					<td th:text="${dto.discount}"/>
+					<td th:text="|${#numbers.formatInteger(dto.pPrice, 0, 'COMMA')}|"/>
+				</tr> 
+				
+			</tbody>
+
+		</table>
+	</div>
+	<div class="row justify-content-between align-items-center">
+		<div class="col-auto mb-3">				
+				<input type="submit" class="btn btn-warning" value="선택수정" formaction="modify">
+				<input type="submit" class="btn btn-danger" value="선택삭제" formaction="delete">
+		</div>
+		<div class="col-auto mb-3">				
+				<a href="insert" class="btn btn-primary">상품추가</a>	
+		</div>
+	</div>
+	</form>
+</section>
+
+
+</body>

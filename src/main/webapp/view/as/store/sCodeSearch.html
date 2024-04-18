@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+$(function(){
+	$("#data tr").on("click",function(){
+		var row = $(this);
+		var rowData1 = row.find('td').map(function(){
+			return $(this).text();
+		}).get()[1];
+		window.opener.document.getElementById("storeCode").value = rowData1;
+
+		var rowData2 = row.find('td').map(function(){
+			return $(this).text();
+		}).get()[2];
+		window.opener.document.getElementById("storeName").value = rowData2;
+		window.close();
+	});
+})
+</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<style>	
+	section {
+		width: 100%;
+		max-width: 1200px;
+		margin: auto;
+	}
+	.scr{
+		border: 1px solid #fff;
+		width: 1200px;
+		height: 450px;
+		overflow-y: scroll;
+	}
+	.tableBox {
+		width: 100%;
+		max-height: 600px;
+		overflow: auto;
+	}
+	.table > thead{
+		position: sticky;
+		top:0;
+	}
+	
+	.table > tfoot{
+		position: sticky;
+		bottom: -1px;
+	}
+
+</style>
+
+<body>
+<h1>매장검색</h1>
+
+
+<section>
+	<form action="">
+	
+		<!-- 검색창은 이런식으로?  -->
+		<div class="searchBox container mb-3 border-bottom">
+			<div class="row g-3 align-items-center">		
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">매장코드</span>
+						<input type="text" class="form-control" name="sCode" placeholder="매장코드 입력"/>
+					</div>
+				</div>										
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">매장명</span>
+						<input type="text" class="form-control" name="sName" placeholder="매장명 입력"/>
+					</div>
+				</div>										
+			</div>
+			<div class="row justify-content-end align-items-center">
+				<div class="col-auto mb-3">				
+					<div class="input-group">
+						<input class="btn btn-dark" type="submit" value="검색"/>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	
+	<!-- 테이블은 이런식으로?  -->
+	<div class="tableBox mb-3">
+		<table id="data" class="table table-striped-columns">
+			<colgroup>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+			</colgroup>
+			<thead>
+				<tr class="table-dark top">
+					<th>NO</th>
+					<th>매장코드</th>
+					<th>매장명</th>
+					<th>주소</th>
+				</tr>
+			</thead>
+			<tbody>		
+				<tr th:each="dto : ${sCodeSearch}">
+					<td th:text="${dtoStat.size - dtoStat.index}"></td><!-- 숫자 역순으로 뽑기 위해! -->
+					<td th:text="${dto.sCode}"></td>
+					<td th:text="${dto.sName}"></td>
+					<td th:text="${dto.addr}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>YuRP</title>
+<style>
+	.big{
+		display:block;	
+	}
+	.tab{
+		display:flex;
+	}
+	.tab>div{
+		margin:10px
+	}
+	input{
+		border:none;
+	}
+</style>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+$(function(){
+	$(".bName").on("click",function(){
+		$("#modify").off("click"); // .bName여러번 클릭 후 modify누르고 저장 누르면 자꾸 클릭 수 만큼 alert창 띄워져서 방지하는 것
+		$("input").attr("style",'background-color : none')
+		var bName = $(this).text();
+		console.log(bNo)
+		var url = '../brand/'+bName
+		$.ajax({
+			 type: 'get'
+	        , url: url
+	        , success: function (bdetail) {
+	        	/* console.log(bdetail)  소문자가 문제였네*/
+	        	$('#bName').val(bdetail.bname);
+	        	$('#bCode').val(bdetail.bcode);
+	        	$('#addr').val(bdetail.addr);
+	        	$('#tel').val(bdetail.tel);
+	            $('#email').val(bdetail.email);
+	            $('#bNo').val(bdetail.bno);
+	            
+	        }
+		});
+		
+		$("#modify").on("click",function(){
+			$("#save").off("click");
+			$("input").attr("readonly",false).attr("style",'background-color : yellow')
+			$("#save").click(function(){
+			 	$.ajax({
+					type : 'post',
+					url : '../brand/'+$("#bNo").val(),
+					data : {
+						bName : $("#bName").val(),
+						bCode : $("#bCode").val(),
+						addr : $("#addr").val(),
+						tel : $("#tel").val(),
+						email : $("#email").val(),
+						bNo : $("#bNo").val()
+					},
+					success: function (data) {
+						alert("수정되었습니다.")
+						location.href="../brand/list"
+					}
+				}) 
+			}) 
+			
+		})
+	})
+	
+	
+	$("#insert").click(function(){
+		
+		$("#modify").off("click");
+		$("#save").off("click");
+		$("#delete").off("click");
+		
+		$("input").attr("readonly",false).attr("style",'background-color : skyblue ').val("")
+		$("#save").click(function(){
+		 	$.ajax({
+				type : 'post',
+				url : '../brand/list',
+				data : {
+					bName : $("#bName").val(),
+					bCode : $("#bCode").val(),
+					addr : $("#addr").val(),
+					tel : $("#tel").val(),
+					email : $("#email").val()
+
+				},
+				success: function (data) {
+					alert("저장되었습니다.")
+					location.href="../brand/list"
+				}
+			}) 
+		})
+	});
+
+	
+	$("#delete").click(function(){
+		var chk = confirm("삭제하시겠습니까?")
+		if(chk==true){
+			location.href="../brand/delete/"+$("#bNo").val();	
+		}
+		
+	});
+	
+})
+</script>
+</head>
+<body>
+<h1>브랜드 명단임다</h1>
+<div class="big">
+	<div class="btn">
+		<button id="insert">추가</button>
+		<button id="modify">수정</button>
+		<button id="save">저장</button>
+		<button id="delete">삭제</button>
+	</div>
+	<div class="tab">
+		<div>
+			<table border="" width="400px">
+				<colgroup>
+					<col width="10%"/>
+					<col width="50%"/>
+					<col />
+				</colgroup>
+				<tr th:each="list : ${blist}">
+					<td th:text="${listStat.index+1}"></td>
+					<td th:text="${list.bNo}" class="bNo" style="display: none;"></td>
+					<td th:text="${list.bCode}" class="bCode"></td>
+					<td th:text="${list.bName}" class="bName"></td>
+				</tr>
+				
+			</table>
+		</div>
+		
+		<div>
+			<table border="" width="600px">
+				<colgroup>
+					<col width="20%"/>
+					<col />
+				</colgroup>
+				
+				<tr>
+					<input type="hidden" id="bNo" name="bNo">
+					<td>브랜드명</td>
+					<td><input type="text" readonly="true"  id="bName" name="bName"></td>
+				</tr>
+				<tr>
+					<td>브랜드코드</td>
+					<td><input type="text" readonly="true" id="bCode" name="bCode"></td>
+				</tr>
+				<tr>
+					<td>주소</td>
+					<td><input type="text" readonly="true" id="addr" name="addr"></td>
+				</tr>
+				<tr>
+					<td>전화번호</td>
+					<td><input type="text" readonly="true" id="tel" name="tel"></td>
+				</tr>
+				<tr>
+					<td>이메일</td>
+					<td ><input type="text" readonly="true" id="email" name="email"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
