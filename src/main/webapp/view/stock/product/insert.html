@@ -1,7 +1,7 @@
 
-<script>
-	$(function(){
-
+<script th:inline="javascript">
+	$(function(){		
+		
 	})
 	
 	function getCode(n){
@@ -29,21 +29,59 @@
 	}
 	
 	function getPrice(n){
-		var pPrice = '';
+		
+		var totPrice = '';
 		var row = $(n).parents('.dataRow');
-		var target = row.find('input[name*=pPrice]');
+		var target = row.find('input[name*=totPrice]');
 		var liPrice = Number(row.find('input[name*=liPrice]').val());
-		var discount = Number(row.find('input[name*=discount]').val());
-		var pre = liPrice - (liPrice*discount/100);
+		var cnt = Number(row.find('input[name*=cnt]').val());
 		
-		pPrice = Math.floor((pre/100))*100;
+		totPrice = liPrice * cnt;
 		
-		target.val(pPrice);
+		target.val(totPrice);
+		
+		
+		/* 통계 - 수량/총액 */
+		var cntArr = $('input[name*=cnt]');
+		var resCnt = $('#resCnt')
+		var resCntVal = 0;
+		$(cntArr).each(function(i,cnt){
+			
+			resCntVal += Number(cnt.value)
+		})
+		console.log(resCntVal)
+		resCnt.text(resCntVal.toLocaleString("ko-KR")+" 개");
+		
+		var priceArr = $('input[name*=totPrice]');
+		var resPrice = $('#resPrice')
+		var resPriceVal = 0;
+		$(priceArr).each(function(i,price){
+			
+			resPriceVal += Number(price.value)
+		})
+		console.log(resPriceVal)
+		resPrice.text(resPriceVal.toLocaleString("ko-KR")+" 원");
+		
 		
 	}
 	
 	
+	function getResPrice(){
+		var priceArr = $('input[name*=totPrice]');
+		var resPrice = $('#resPrice')
+		var val = 0;
+		$(priceArr).each(function(i,price){
+			
+			val += Number(price.value)
+		})
+		console.log(val)
+		resPrice.text(val.toLocaleString("ko-KR")+" 원");
+	}
+	
+	
+	
 	function addRow(){
+
 		var cnt = totCnt();
 		console.log(cnt ,'-----')
 		var addData = `
@@ -51,10 +89,8 @@
 	 		<td><div class="btn btn-sm btn-danger" onclick="delRow(this);">지우기</div></td>
 	 		<td>
 	 			<select class="form-select" name="prodArr[${cnt}].bCode" required>
-		             <option value="" selected disabled hidden>브랜드 선택</option>
-	                 <option value="117901">브랜드1</option>
-	                 <option value="117902">브랜드2</option>
-	                 <option value="117903">브랜드3</option>
+		 			<option value="" selected disabled hidden>브랜드 선택</option>
+
 		         </select>
 	 		</td>
 	 		<td>
@@ -86,18 +122,17 @@
 				<input type="text" class="form-control" name="prodArr[${cnt}].liPrice" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
 			</td>
 			<td>
-				<input type="text" class="form-control" name="prodArr[${cnt}].discount" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
+				<input type="text" class="form-control" name="prodArr[${cnt}].cnt" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
 			</td>
 			<td>
-				<input type="text" class="form-control" name="prodArr[${cnt}].pPrice" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" readonly required />
+				<input type="text" class="form-control" name="prodArr[${cnt}].totPrice" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" readonly required />
 			</td>
 		</tr>
 		`;
 
-
 		$('#dataBody').append(addData);
-		totCnt();
-		
+		totCnt();	
+		bList();
 	}
 	
 	function delRow(del){
@@ -111,9 +146,19 @@
 		$('#rowCnt').text(tot);
 		return tot;
 	}
+	
+	
+	function bList(){
+		var target = $('.dataRow').last().find('select[name*=bCode]');
+		var addOpt ='';
+		 [# th:each="bd : ${brandData}"]
+		 addOpt+= '<option value="'+[[${bd.bCode}]]+'">'+[[${bd.bName}]]+'</option>'
+	    [/]
+		 target.append(addOpt);
+	}
 </script>
 
-<h2>상품 등록</h2>
+<h2 class="title row mt-5 mb-5 p-2 justify-content-center">상품 등록</h2>
 
 <section>
 	<form action="insertReg" method="post">
@@ -130,8 +175,8 @@
 					<col style="min-width:80px;"/>
 					<col style="min-width:200px;"/>
 					<col style="min-width:120px;"/>
-					<col style="min-width:80px;"/>
-					<col style="min-width:120px;"/>
+					<col style="min-width:100px;"/>
+					<col style="min-width:150px;"/>
 
 				</colgroup>
 				<thead>
@@ -146,8 +191,8 @@
 						<td>사이즈</td>
 						<td>상품코드</td>
 						<td>정가</td>
-						<td>할인율</td>
-						<td>판매가</td>
+						<td>입고수량</td>
+						<td>총금액</td>
 
 					</tr>
 				</thead>
@@ -157,9 +202,8 @@
 				 		<td>
 				 			<select class="form-select" th:name="|prodArr[0].bCode|" required>
 					             <option value="" selected disabled hidden>브랜드 선택</option>
-				                 <option value="117901">브랜드1</option>
-				                 <option value="117902">브랜드2</option>
-				                 <option value="117903">브랜드3</option>
+					             <option th:each="bd : ${brandData}" th:value="${bd.bCode}" th:text="${bd.bName}" />
+
 					         </select>
 				 		</td>
 				 		<td>
@@ -188,18 +232,34 @@
 							<input type="text" class="form-control" th:name="|prodArr[0].pCode|" onKeyup="getCode(this);" readonly required />
 						</td>
 						<td>
-							<input type="text" class="form-control" th:name="|prodArr[0].liPrice|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
+							<input type="text" class="form-control" th:name="|prodArr[0].liPrice|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this); getResPrice();" required />
 						</td>
 						<td>
-							<input type="text" class="form-control" th:name="|prodArr[0].discount|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
+							<input type="text" class="form-control" th:name="|prodArr[0].cnt|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
 						</td>
 						<td>
-							<input type="text" class="form-control" th:name="|prodArr[0].pPrice|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" readonly required />
+							<input type="text" class="form-control" th:name="|prodArr[0].totPrice|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this); getResPrice();" readonly required />
 						</td>
 					</tr>
 
 				</tbody>
+				<tfoot class="table-group-divider">
+					<tr class="tot table-secondary">
+						<td>통계</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td id="resCnt">0</td>
 
+						<td id="resPrice">0 원</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 		<div class="row justify-content-between align-items-center">	

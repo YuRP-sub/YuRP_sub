@@ -1,5 +1,6 @@
 package yurp.model;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -120,5 +121,31 @@ public interface InandoutMapper {
 			+ "</script> "
 			 )
 	List<InandoutDTO> viewDetail(InandoutDTO dto);
+	
+	
+	@Select("select * from store where s_code != 'as'")
+	List<StoreDTO> storeList();
+	
+	//타매장
+	@Select("<script>"
+			+ "select DISTINCT p.*,i.s_code,i2.s_code, "
+			+ " i.cnt AS start_cnt, "
+			+ "	i2.cnt AS arr_cnt "
+			+ "from product p "
+			+ " JOIN  inventory i on i.s_code = #{start}"//출밞매장
+			+ " JOIN  inventory i2 on i2.s_code = #{arrival}" //도착매장	
+			+ "<where>"
+			+ "	<trim prefix=' ' suffixOverrides = 'and | or'> "
+			+   "<if test='bCode != null'> "
+			+   "p.b_code=#{bCode} and "
+			+   "</if>"
+			
+			+ 	"<if test='pCode != null and pCode != \"\"'> "
+			+ 	"p.p_code like concat('%',#{pCode},'%') "
+			+ 	"</if>"
+			+ "	</trim>"
+			+ "</where> "
+			+ "</script> ")
+	List<ProductDTO> storeProdList(HashMap<String, String> param);
 	
 }
