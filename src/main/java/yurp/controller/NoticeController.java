@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import yurp.model.NoticeDTO;
 import yurp.model.NoticeMapper;
 import yurp.model.StoreDTO;
+import yurp.model.TemplateData;
 
 @Controller
 @RequestMapping("/notice")
@@ -24,36 +26,58 @@ public class NoticeController {
 	@Resource
 	NoticeMapper mapper;
 
+	@ModelAttribute
+	TemplateData templateData(TemplateData data, HttpServletRequest request) {
+		
+		String uri = request.getRequestURI();
+		String service = uri.substring(uri.lastIndexOf("/")+1);
+		
+		//System.out.println("temp-service :"+service);
+		
+		data.setCate("notice");
+		data.setService(service);
+		System.out.println("templateData:"+data);
+		
+		return data;
+	}
+	
 	//**공지사항 목록*/
-	@RequestMapping("list")
-	String list(Model mm, NoticeDTO dto, HttpServletRequest request) {
+	@RequestMapping("{service}")
+	String list(Model mm, NoticeDTO dto, TemplateData templateData, HttpServletRequest request) {
+		templateData.setCate("notice");
+		
 		StoreDTO loginInfo = (StoreDTO)request.getSession().getAttribute("loginStore");
 		mm.addAttribute("login", loginInfo);
 		
-		mm.addAttribute("nList", mapper.list(dto));
-		mm.addAttribute("nList", mapper.listPname(dto));
-		return "notice/list";
+		switch(templateData.getService()) {
+		case "list":
+			mm.addAttribute("nList", mapper.list(dto));
+			break;
+		
+		case  "modify":
+			mm.addAttribute("dto",mapper.detail(dto.getNNo()));
+			break;
+		}
+//		mm.addAttribute("nList", mapper.listPname(dto));
+		return "template";
 	}
 	
-	//**공지사항 상세보기*/
-	@RequestMapping("detail/{nNo}")
-	String detail(Model mm, @PathVariable int nNo, NoticeDTO dto, HttpServletRequest request) {
-		mm.addAttribute("dto", mapper.detail(nNo));
+	@RequestMapping("{service}/{no}")  /// detail, deleteForm, modifyForm
+	String serviceNo(Model mm,@PathVariable int no, NoticeDTO dto, TemplateData templateData, HttpServletRequest request) {
+
+		templateData.setCate("notice");
 
 		StoreDTO loginInfo = (StoreDTO)request.getSession().getAttribute("loginStore");
-		mm.addAttribute("login", loginInfo);
+		System.out.println(no);
+		mm.addAttribute("login", loginInfo);                                           
+		mm.addAttribute("dto",mapper.detail(no));
 		
-		return "notice/detail";
+		return "template";
 	}
-
-	//insert.html 열기
-	//**공지사항 추가*/
-	@GetMapping("insert")
-	void insertFrom() {}
 	
-	@PostMapping("insert")
-	String insertReg(Model mm, NoticeDTO dto, MultipartHttpServletRequest mr, HttpServletRequest request) {
-	
+	@RequestMapping({"insertReg"})  ///deleteReg, modifyReg 
+	String insertReg(Model mm, NoticeDTO dto, MultipartHttpServletRequest mr, HttpServletRequest request, TemplateData templateData) {
+		
 		String file = "";
 		for (MultipartFile mpf : mr.getFiles("upFile")) {
 			file += mpf.getOriginalFilename();			
@@ -61,10 +85,45 @@ public class NoticeController {
 		}
 		mm.addAttribute("file",file);
 		dto.setFile(file); // 파일명을 DTO에 설정
-		mm.addAttribute("dto", mapper.insert(dto));
-		return "redirect:/notice/list";
+		//mm.addAttribute("dto", mapper.insert(dto));
+		mapper.insert(dto);
+		templateData.setMsg("추가되었습니다");
+		templateData.setGoUrl("list");
+		
+		
+		return "inc/alert";
 	}
 	
+	//**공지사항 상세보기*/
+//	@RequestMapping("detail/{nNo}")
+//	String detail(Model mm, @PathVariable int nNo, NoticeDTO dto, HttpServletRequest request) {
+//		mm.addAttribute("dto", mapper.detail(nNo));
+//
+//		StoreDTO loginInfo = (StoreDTO)request.getSession().getAttribute("loginStore");
+//		mm.addAttribute("login", loginInfo);
+//		
+//		return "notice/detail";
+//	}
+
+	//insert.html 열기
+	//**공지사항 추가*/
+//	@GetMapping("insert")
+//	void insertFrom() {}
+//	
+//	@PostMapping("insert")
+//	String insertReg(Model mm, NoticeDTO dto, MultipartHttpServletRequest mr, HttpServletRequest request) {
+//	
+//		String file = "";
+//		for (MultipartFile mpf : mr.getFiles("upFile")) {
+//			file += mpf.getOriginalFilename();			
+//			fileUpload(mpf, request);
+//		}
+//		mm.addAttribute("file",file);
+//		dto.setFile(file); // 파일명을 DTO에 설정
+//		mm.addAttribute("dto", mapper.insert(dto));
+//		return "redirect:/notice/list";
+//	}
+//	
 
 	//**공지사항 수정*/
 	@GetMapping("modify/{nNo}")
@@ -101,7 +160,7 @@ public class NoticeController {
         
 		int pos = mf.getContentType().indexOf("/");
 		String type = mf.getContentType().substring(0,pos);
-		//System.out.println(type.equals("image")+","+type);
+		System.out.println(type.equals("image")+","+type);
 		
 		if(mf.isEmpty()) {	// 파일 없으면 저장 x
 			System.out.println("파일 없음");
@@ -115,8 +174,8 @@ public class NoticeController {
 			if (!mf.isEmpty()) {
 				try {
 					// 파일 저장 경로
-					String path = request.getServletContext().getRealPath("fff")+"\\";
-					path = "C:\\GYUHWI\\workspace\\YuRP\\src\\main\\webapp\\view\\notice\\fff\\";
+					String path = request.getServletContext().getRealPath("view\\notice\\fff")+"\\";
+					//path = "C:\\GYUHWI\\workspace\\YuRP\\src\\main\\webapp\\view\\notice\\fff\\";
 					//path = "workspace\\YuRP\\src\\main\\webapp\\view\\notice\\fff\\";
 					
 					// 업로드된 파일을 지정된 경로에 저장

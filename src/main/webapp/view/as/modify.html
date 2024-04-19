@@ -5,6 +5,18 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 	$(function() {
+		
+		$('#pCodeSearch').on("click",function(e){
+			
+			e.preventDefault();
+			let popUrl = "../pCodeSearch";
+			let popOption = "width = 650px, height=550px, top=300px, left=300px, scrollbars=yes";
+			
+			window.open(popUrl,"품번",popOption);
+			
+		});
+		
+		
 		$("#ok").click(function() {
 			var essential = document.getElementsByClassName("essential");
 			var ee = true;
@@ -20,15 +32,16 @@
 				alert('모두 작성해주세요.')
 				return false;
 			}else{
-				confirm('as처리하시겠습니까?')
+				confirm('수정하시겠습니까?')
 				return true;
 			}
 		});
+		
 	});
 </script>
 </head>
 <body>
-<h1>as 처리</h1>
+as 매장수정
 
 <form action="" method="post" th:object="${dto}">
 	<table border="">
@@ -42,71 +55,50 @@
 		    <col width="10%" />
 		  </colgroup>
 		  
-		  
-	  		<tr>
-	  			<th>No</th>
-				<td th:text="${dto.aNo}"></td>
-				<th>매장코드</th>
-				<td th:text="${dto.sCode}"></td>
-				<th>매장명</th>
-				<td th:text="${dto.sName}"></td>
-				<th>접수일</th>
-				<td th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></td>
-			</tr>
 		<tr>
 			<th>접수번호</th>
 			<td th:text="${dto.asNum}"></td>
 			<th>처리결과</th>
-			<td>
-				<select name="asRes">
-					<option value="수선전">수선전</option>
-					<option value="수선완료">수선완료</option>
-					<option value="수선불가">수선불가</option>
-				</select>
-			</td>
+			<td th:text="${dto.asRes}"></td>
 			<th>진행여부</th>
-			<td>
-				<select name="asProg">
-					<option value="수선중">수선중</option>
-					<option value="수선후발송">수선후발송</option>
-					<option value="수선불가반송">수선불가반송</option>
-				</select>
-			</td>
-			<th>처리일</th>
-			<td th:text="${#dates.format(dto.fixDate, 'yyyy-MM-dd')}"></td>
+			<td th:text="${dto.asProg}"></td>
 		</tr>
 			<tr>
+				<th>매장코드</th>
+				<td th:text="${dto.sCode}" colspan="7"></td>
+			</tr>
+			<tr>
+				<th>매장명</th>
+				<td th:text="${dto.sName}" colspan="7"></td>
+			</tr>
+			<tr>
 				<th>고객성함</th>
-				<td th:text="${dto.asName}" colspan="7"></td>
+				<td colspan="7"><input class="essential" type="text" name="asName" th:field="*{asName}"/></td>
 			</tr>
 			<tr>
 				<th>고객연락처</th>
-				<td th:text="${dto.asTel}" colspan="7"></td>
+				<td colspan="7"><input class="essential" type="text" name="asTel" th:field="*{asTel}"/></td>
+			</tr>
+			<tr>
+				<th>상품코드</th>
+				<td colspan="7"><input class="essential" id="productCode" type="text" name="pCode" th:field="*{pCode}"/><button id="pCodeSearch">조회</button></td>
 			</tr>
 			<tr>
 				<th>상품명</th>
-				<td th:text="${dto.pName}" colspan="7"></td>
+				<td colspan="7"><input class="essential" id="productName" type="text" name="pName" th:field="*{pName}"/></td>
 			</tr>
 			<tr>
 				<th>구매날짜</th>
-				<td th:text="${#dates.format(dto.purDate, 'yyyy-MM-dd')}" colspan="7"></td>
+				<td colspan="7"><input class="essential" type="date" name="purDate" th:field="*{purDate}"/></td>
 			</tr>
 			<tr>
 				<th>의뢰내용</th>
-				<td th:text="${dto.asNote}" colspan="7"></td>
+				<td colspan="7"><textarea class="essential" rows="5" cols="50" name="asNote" th:field="*{asNote}"></textarea></td>
 			</tr>
+			
 			<tr>
-				<th>처리내용</th>
-				<td colspan="7"><textarea class="essential" rows="5" cols="50" name="resCon"></textarea></td>
-			</tr>
-			<tr>
-				<th>수선비</th>
-				<td colspan="7"><input class="essential" type="number" name="asPrice"/></td>
-			</tr>
-
-			<tr>
-				<td colspan="8" align="right">
-					<input type="submit" value="처리" id="ok"/>
+				<td colspan="7" align="right">
+					<input type="submit" value="수정" id="ok"/>
 					<a href="/as/list">취소</a>
 				</td>
 			</tr>
