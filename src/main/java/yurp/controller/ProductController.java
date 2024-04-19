@@ -60,6 +60,9 @@ public class ProductController {
 			mm.addAttribute("productData", mapper.list(dtos.getProdArr()));
 			break;
 			
+		case "insert":
+			mm.addAttribute("brandData", mapper.brandList());
+			break;
 		case "modify":
 			mm.addAttribute("productData", mapper.modList(dtos.getProdArr()));
 			mm.addAttribute("brandData", mapper.brandList());
@@ -76,6 +79,7 @@ public class ProductController {
 		switch(templateData.getService()) {
 		case "insertReg":
 			mapper.insert(dtos.getProdArr());
+			mapper.setInven(dtos.getProdArr());
 			templateData.setMsg("상품이 추가되었습니다.");
 			templateData.setGoUrl("list");
 			break;
@@ -92,6 +96,7 @@ public class ProductController {
 		
 		return "inc/alert";
 	}
+
 
 //	@PostMapping("delete")
 //	String delete(DTOs dtos) {

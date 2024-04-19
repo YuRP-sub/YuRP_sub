@@ -17,6 +17,7 @@ public interface ProductMapper {
 			+ "select p.*, b.b_name "
 			+ "from product as p join brand as b on p.b_code = b.b_code "
 			+ "<where> "
+			
 			+ "<trim prefix=' ' suffixOverrides = 'and | or'>"
 			+ "<if test='season != null'> "
 			+ "season=#{season} and"
@@ -30,7 +31,6 @@ public interface ProductMapper {
 			+ "<if test='pCode != null and pCode != \"\"'> "
 			+ "p_code like concat('%',#{pCode},'%') "
 			+ "</if>"
-
 			+ "</trim>"
 
 			+ "</where>"
@@ -65,7 +65,7 @@ public interface ProductMapper {
 				+ " i.cnt AS store_cnt, "
 				+ "	i2.cnt AS in__cnt "
 				+ "from product p "
-				+ " JOIN  inventory i on i.s_code = 'yurp002'"//세션
+				+ " JOIN  inventory i on i.s_code = 'admin'"//세션
 				+ " JOIN  inventory i2 on i2.s_code = (select s_code from store s where s.s_name = #{sName})" //파라미터?	
 				+ "<where>"
 				+ " i.p_code = p.p_code and p.b_code = #{bCode}  "
@@ -91,16 +91,29 @@ public interface ProductMapper {
 	@Insert({
 		" <script> "
 		,"insert into product "
-		, "(b_code, season, grade, p_name, p_num, color, p_size, p_code, li_price, discount, p_price) values "
+		, "(b_code, season, grade, p_name, p_num, color, p_size, p_code, li_price, p_price) values "
 		, "<foreach collection='arr' item='prod' separator=',' index='i'>"
 		, "<if test='prod.bCode != null'>"
 		, "(#{prod.bCode}, #{prod.season}, #{prod.grade}, "
 		, "#{prod.pName}, #{prod.pNum}, #{prod.color}, #{prod.pSize}, #{prod.pCode}, "
-		, "#{prod.liPrice}, #{prod.discount}, #{prod.pPrice})"
+		, "#{prod.liPrice}, #{prod.liPrice})"
 		, "</if>"
 		, "</foreach>"
 		, "</script> "})
 	int insert(ArrayList<ProductDTO> arr);
+	
+	@Insert({
+		"<script>"
+		,"insert into inventory "
+		,"(p_code, cnt, s_code) values "
+		, "<foreach collection='arr' item='prod' separator=',' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		, "(#{prod.pCode}, #{prod.cnt}, 'admin') "
+		, "</if>"
+		, "</foreach>"
+		,"</script>"
+	})
+	int setInven(ArrayList<ProductDTO> arr);
 	
 	
 	@Select({

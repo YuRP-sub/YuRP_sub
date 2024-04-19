@@ -1,10 +1,224 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-공지 추가
-</body>
-</html>
+
+
+
+<script>
+	$(function(){
+		$("#delete").on("click",function(){
+			$("input[type='checkbox']:checked").each(function(){
+				  var row = $(this).closest('tr');
+			        row.remove();
+			})
+		})
+		
+		$("#prodAdd").on("click",function(){
+			
+			if(!$("select[name='arrival']").val()){
+				alert('도착매장을 선택해주세요.');
+				return;
+			}
+			
+			var start = $("input[name='start']").val();
+			var sName = $("input[name='sName']").val()
+			var arrival = $("select[name='arrival']").val();
+			var arrName = $("select[name='arrival'] option:checked").text()
+			window.open("prodAdd?start="+start+"&sName="+sName+"&arrival="+arrival+"&arrName="+arrName,"_blank","width=1000,height=600"); 
+			
+
+		});
+	})
+	var index = 1;
+	var cntTot = 0;
+	var priTot = 0;
+	var brand = '';
+	
+	function setList(arr){
+		prodChk = $(".prod").children().length;
+
+	    for(var i=0; i<arr.length; i++){
+			
+			 var tr = $("<tr>")
+			 tr.append($("<td>").append($("<input type='checkbox'>")));
+			 tr.append($("<td>").text(i+1+prodChk));
+			 tr.append($("<td>").text(arr[i].bCode));
+			 tr.append($("<td>").text(arr[i].pNum)); 
+			 tr.append($("<td>").text(arr[i].color));
+			 tr.append($("<td>").text(arr[i].pSize));
+			 tr.append($("<td>").text(arr[i].liPrice));
+			 tr.append($("<td>").text(arr[i].pName));
+			 tr.append($("<td>").text(arr[i].storeCnt)); 
+			 tr.append($("<td>").text(arr[i].inCnt)); 
+			 tr.append($("<td>").text(arr[i].reqCnt)); 
+			
+			 
+			 
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].iNo' value='"+arr[i].iNo+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].bCode' value='"+arr[i].bCode+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pNum' value='"+arr[i].pNum+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].color' value='"+arr[i].color+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pSize' value='"+arr[i].pSize+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].liPrice' value='"+arr[i].liPrice+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pName' value='"+arr[i].pName+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].reqCnt' value='"+arr[i].reqCnt+"'>")); 
+		 	 
+
+		
+			 
+			 $(".prod").append(tr);
+			 cntTot+=parseInt(arr[i].reqCnt);
+			 priTot+=parseInt(arr[i].reqCnt * arr[i].liPrice);
+			 brand = arr[i].bCode;
+		
+			 
+	    }
+		console.log(cntTot);
+		console.log(priTot);
+		console.log(brand);
+		$("span[name='statCnt']").text(cntTot);
+		$("span[name='statPrice']").text(priTot);
+		$("span[name='brand']").text(brand);
+		$("input[name='bCode']").val(brand);
+		$("input[name='statCnt']").val(cntTot);
+		$("input[name='statPrice']").val(priTot);
+		
+		
+	}
+
+
+
+</script>
+
+<h2 class="title row mt-5 mb-5 p-2 justify-content-center">출고 등록</h2>
+
+<section>
+	<form action="../rt/insert" method="post">
+
+		<div class="searchBox container mb-3 border-bottom">
+			<div class="row g-5 mb-3 justify-content-start align-items-center">
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">등록일자</span>
+						<span th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"  class="form-control"></span>
+					</div>
+				</div>
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">전표번호</span>
+						<input class="form-control" type="text" id="rStat" th:name="rStat" th:value="|${session.loginStore.sCode}${#dates.format(#dates.createNow(), 'yyMMddHHmmSS')}|" readonly/>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="row g-3 mb-3 mt-3 justify-content-between align-items-center">		
+				<div class="row col-md-9">
+					<div class="col-md-4">				
+						<div class="input-group">
+							<span class="input-group-text">출고 유형</span>
+							<select class="form-select" name="type" th:switch="${session.loginStore.auth}">
+								<th:block th:case="관리자">
+									<option value="일반매장출고">일반매장출고</option>
+								</th:block>
+	
+								<th:block th:case="매장">
+									<option value="시즌반품">시즌반품</option>
+									<option value="입고불량반품">입고불량반품</option>
+									<option value="기타반품">기타반품</option>
+									<option value="본사지시RT">본사지시RT</option>
+									<option value="매장요청RT">매장요청RT</option>
+								</th:block>						
+							
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4">				
+						<div class="input-group">
+							<span class="input-group-text">출발매장</span>
+							
+							<input class="form-control" type="hidden" th:name="start" th:value="${session.loginStore.sCode}">
+							<input class="form-control" type="text" th:name="sName" th:value="${session.loginStore.sName}">
+						</div>
+					</div>
+					<div class="col-md-4">				
+						<div class="input-group">
+							<span class="input-group-text">도착매장</span>
+							<select class="form-select" name="arrival" required>
+								<option selected disabled hidden>도착매장 선택</option>
+								<th:block th:each="st : ${storeList}">
+									<option th:unless="${session.loginStore.sCode eq st.sCode}" th:value="${st.sCode}" th:text="${st.sName}" />
+								</th:block>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row col-md-auto">
+					<div class="col-md-auto">				
+						<a id="prodAdd" class="btn btn-dark">
+							상품검색
+							<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+							  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+							</svg>
+						</a>	
+					</div>
+				</div>					
+			</div>							
+		</div>
+			
+
+	
+	<!-- 테이블은 이런식으로?  -->
+	<div class="tableBox mb-3">
+		<table class="table table-striped-columns">
+			<colgroup>
+				<col style="min-width:80px; width: 5%;"/>
+				<col style="min-width:80px; width: 5%;"/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+				<col style=""/>
+			</colgroup>
+			<thead>
+		
+				<tr class="table-dark top">
+					<td></td>
+					<td>no</td>
+					<td>시즌</td>
+					<td>브랜드</td> 
+					<td>품명</td>
+					<td>품번</td>
+					<td>컬러</td>
+					<td>사이즈</td>
+					<td>상품코드</td>					
+					<td>정가</td>
+					<td>할인율</td>
+					<td>판매가</td>
+					<td>출고수량</td>
+					<td>총액</td>
+				</tr>
+			</thead>
+			<tbody class="prod"></tbody>
+			<tfoot></tfoot>
+		</table>
+	</div>
+	<div class="row justify-content-between align-items-center">
+		<div class="col-auto mb-3">					
+			<a id="delete"  class="btn btn-danger">선택삭제</a>	
+		</div>
+		
+		<div class="col-auto mb-3">				
+			<input class="btn btn-primary" type="submit" value="등록"/>
+		</div>
+		
+	</div>
+	</form>
+</section>
+
+

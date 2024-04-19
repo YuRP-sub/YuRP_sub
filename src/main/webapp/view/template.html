@@ -47,6 +47,9 @@
 		<th:block th:case="매장">
 			<th:block th:replace="inc/header :: headerStore"/>
 		</th:block>
+		<th:block th:default>
+			<th:block th:replace="inc/header :: headerAdmin"/>
+		</th:block>
 	</th:block>
 	
 	
