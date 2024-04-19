@@ -13,9 +13,9 @@ import org.apache.ibatis.annotations.Update;
 public interface AsMapper {
 
 	//------공통
-	@Select("SELECT ascenter.*, a.s_name as sName, a.addr as addr from ascenter "
-			+ "INNER JOIN store AS a ON a.s_code = ascenter.s_code")
-	List<AsDTO> list(AsDTO dto);
+//	@Select("SELECT ascenter.*, a.s_name as sName, a.addr as addr from ascenter "
+//			+ "INNER JOIN store AS a ON a.s_code = ascenter.s_code")
+//	List<AsDTO> list(AsDTO dto);
 	
 	@Select("SELECT ascenter.*, a.s_name, b.p_name "
 			+ "FROM ascenter "
@@ -113,6 +113,6 @@ public interface AsMapper {
 		, " 	</if> "
 		, " </where> "
 		, " </script> "})
-	List<AsDTO> listPname(AsDTO dto);
+	List<AsDTO> list(AsDTO dto);
 
 }
