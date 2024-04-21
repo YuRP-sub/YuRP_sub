@@ -177,4 +177,21 @@ public interface ProductMapper {
 	int modReg(ArrayList<ProductDTO> arr);
 	
 
+	
+	//규휘가 말아보는 상품 검색 
+	@Select({
+		" <script> "
+		," SELECT * from product "
+		, "INNER JOIN brand AS a ON a.b_code = product.b_code"  
+		, "INNER JOIN inventory AS b ON b.cnt = product.cnt"  
+		, " <where> "
+		, " 	<if test='bCode != null'> "
+		, " 		AND a.b_code = #{bCode} "
+		, " 	</if> "
+		, " 	<if test='pNum != null'> "
+		, " 		AND p_num like concat('%', #{pNum}, '%')"
+		, " 	</if> "
+		, " </where> "
+		, " </script> "})
+	List<ProductDTO> storeOrderS(ProductDTO dto);
 }
