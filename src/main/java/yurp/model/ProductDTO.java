@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
 	
 
-	Integer pNo, grade,  discount, pPrice, iNo, cnt, liPrice,adminCnt,storeCnt,inCnt, startCnt, arrCnt;
+	Integer pNo, grade,  discount, pPrice, iNo, cnt, movCnt, liPrice,adminCnt,storeCnt,inCnt, startCnt, arrCnt;
 	String pCode, pNum, season, pName, color, pSize, bCode, sCode, bName,pNumChk,sName;
 	
 	

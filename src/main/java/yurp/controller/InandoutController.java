@@ -1,11 +1,17 @@
 package yurp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,14 +36,14 @@ public class InandoutController {
 	@RequestMapping("{service}")
 	String sellList(Model mm, InandoutDTO dto,TemplateData templateData, HttpServletRequest request) {
 		templateData.setCate("stock/inandout");
-		
-		mm.addAttribute("inandoutData",inandoutmapper.list(dto));
-		mm.addAttribute("totData",inandoutmapper.tot(dto));
+
 		mm.addAttribute("storeList",inandoutmapper.storeList());
 		
-		if(templateData.getService() == "prodAdd") {
-			
-		}
+		if(templateData.getService() == "list") {
+			mm.addAttribute("inandoutData",inandoutmapper.list(dto));
+			mm.addAttribute("totData",inandoutmapper.tot(dto));			
+		}		
+		
 		return "template";
 	}
 	
@@ -62,7 +68,18 @@ public class InandoutController {
 
 		if(pCode!="" && pCode!=null || bCode!=null) {			
 			mm.addAttribute("products",inandoutmapper.storeProdList(param));
+		}	
+	}
+	
+	
+	@GetMapping("add")
+	public @ResponseBody HashMap<String, ProductDTO> add(@RequestParam("key") String arr) {
+		HashMap<String, ProductDTO> res = new HashMap<>();
+		List<ProductDTO> dataArr = inandoutmapper.add(arr.split(","));
+		for (ProductDTO rr : dataArr) {
+			res.put(rr.getPCode(), rr);
 		}
-		
+		System.out.println("res: "+ res);
+		return res;
 	}
 }

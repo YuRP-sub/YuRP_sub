@@ -31,7 +31,29 @@
 	var priTot = 0;
 	var brand = '';
 	
+	function addList(arr){
+		console.log(arr)
+	   	const dt = {
+			"key": arr
+		}
+	   	$.ajax({
+           url: "add",
+           type: "GET",
+           data: dt,
+           success: function(res){   
+        	   console.log(res)
+		 		$.each(res, function(i,p){
+		 			console.log(i, p)
+		 		})
+           },
+           error: function(){
+               alert("실패");
+           }
+       }); 
+	}
+	
 	function setList(arr){
+		console.log(arr);
 		prodChk = $(".prod").children().length;
 
 	    for(var i=0; i<arr.length; i++){
