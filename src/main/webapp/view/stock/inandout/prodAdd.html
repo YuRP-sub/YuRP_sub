@@ -23,12 +23,12 @@
 	}
 	section {
 		width: 100%;
-		max-width: 1200px;
+		max-width: 1000px;
 		margin: auto;
 	}
 	.tableBox {
 		width: 100%;
-		max-height: 600px;
+		max-height: 400px;
 		overflow: auto;
 		text-align:center;
 	}
@@ -46,68 +46,85 @@
 
 <script th:inline="javascript">
 $(function(){
-    $("#btn").on("click",function(){
+/*     $("#btn").on("click",function(){
     
     	var arr = [];
     	
         $("tbody tr").each(function(i){
             var tr = $(this);
-            var reqCntValue = tr.find("input[id='reqCnt']").val();
+            var chk = tr.find("input[type='checkbox']:checked");
+            var chkRow = chk.closest('tr');
+            var chkProd = chkRow.find("td[id='pCode']").text()
             if (reqCntValue !== "") {
-                var obj = {
-                    iNo: tr.find("input[id='iNo']").val(),
-                    bCode: tr.find("td[id='bCode']").text(),
-                    pNum: tr.find("td[id='pNum']").text(),
-                    color: tr.find("td[id='color']").text(),
-                    pSize: tr.find("td[id='pSize']").text(),
-                    liPrice: tr.find("td[id='liPrice']").text(),
-                    pName: tr.find("td[id='pName']").text(),
-                    storeCnt: tr.find("td[id='startCnt']").text(),
-                    inCnt: tr.find("td[id='arrCnt']").text(),
-                    reqCnt: reqCntValue 
+                var obj = {                   
+                    pCode: tr.find("td[id='pCode']").text()
                 };
                 arr.push(obj);
             }
+            
+            
+            
         });
-        // 부모 함수 호출
+        // 부모 함수 호출s
         window.opener.setList(arr);
         window.close();
-    });
+    }); */
     
-    $(document).ready(function(){
-/*         var startParam = [[${param.start}]][0].split("_");
-        var arrParam = [[${param.arrival}]][0].split("_");
-        $("input[name='start']").val(startParam[0]);
-        $("input[name='sName']").val(startParam[1]);
-        $("input[name='arrival']").val(arrParam[0]);
-        $("input[name='arrName']").val(arrParam[1]); */
+});
+
+function chked(){
+/* 	var arr = "";
+	$("input[type='checkbox']:checked").each(function(i){
+    	pCode = $(this).closest('tr').find("td[id='pCode']").text();
+    	arr += pCode+','
+		
+	})
+	arr = arr.substring(0,arr.lastIndexOf(','));
+   	console.log('arr: ',arr)
+   	const dt = {
+		"key": arr
+	}
+   	$.ajax({
+           url: "add",
+           type: "GET",
+           data: dt,
+           success: function(res){
+        	   window.opener.addList(res);
+        	   window.close();
+           },
+           error: function(){
+               alert("실패");
+           }
+       }); */
+	var arr = "";
+	
+    $("input[type='checkbox']:checked").each(function(i){
+        var tr = $(this).closest($('tr'));
+        var pCode = tr.find("td[id='pCode']").text()
+
+        if(pCode != null || pCode != ""){
+	        arr+= pCode+',';
+        	
+        }
         
     });
-});
+    // 부모 함수 호출s
+    window.opener.addList(arr);
+   
+	
+}
 
 </script>
 <body>
 
 <section class="container-lg mt-3">
-<h3>상품 검색</h3>
+<h3>[[${session.loginStore.sName}]] 보유재고 검색</h3>
 <form action="">
+<input class="form-control" type="hidden" id="startInput" name="start" th:value="${param.start}" readonly/>
 	<div class="searchBox container mb-3 border-bottom">
-		<div class="row g-3 align-items-center">	
-			<div class="col-md-3">			
-				<div class="input-group">
-					<span class="input-group-text">출발매장 </span>
-						<input class="form-control" type="hidden" id="startInput" name="start" th:value="${param.start}" readonly/>
-						<input class="form-control" type="text" id="startInput" name="sName" th:value="${param.sName}" readonly/>
-				</div>
-			</div>	
-			<div class="col-md-3">			
-				<div class="input-group">
-					<span class="input-group-text">도착매장</span>
-					<input class="form-control" type="hidden" name="arrival" th:value="${param.arrival}" readonly/>
-					<input class="form-control" type="text" name="arrName" th:value="${param.arrName}" readonly/>
-				</div>
-			</div>	
-			<div class="col-md-3">	
+		<div class="row justify-content-between align-items-center">	
+			<div class="row g-3 col-md-11 mb-2">	
+				<div class="col-md-4">	
 					<div class="input-group">
 						<span class="input-group-text">브랜드</span>
 						<select class="form-select" name="bCode">
@@ -116,18 +133,25 @@ $(function(){
 	                    </select>
 					</div>			
 				</div>
-			<div class="col-md-3">				
-				<div class="input-group">
-					<span class="input-group-text">품번</span>
-					<input type="text" class="form-control" name="pCode" placeholder="품번 또는 코드 입력"/>
+				<div class="col-md-4">				
+					<div class="input-group">
+						<span class="input-group-text">품명</span>
+						<input type="text" class="form-control" name="pName" placeholder="품명 입력"/>
+					</div>
+				</div>										
+				<div class="col-md-4">				
+					<div class="input-group">
+						<span class="input-group-text">품번</span>
+						<input type="text" class="form-control" name="pCode" placeholder="품번 또는 코드 입력"/>
+					</div>
+				</div>										
+			</div>
+			<div class="row g-3 col-md-1 mb-2">		
+				<div class="col-auto">				
+					<div class="input-group">
+						<input class="btn btn-dark" type="submit" value="검색"/>
+					</div>	
 				</div>
-			</div>										
-		</div>
-		<div class="row justify-content-end align-items-center">
-			<div class="col-auto mb-3">				
-				<div class="input-group">
-					<input class="btn btn-dark" type="submit" value="검색"/>
-				</div>	
 			</div>
 		</div>
 	</div>
@@ -146,7 +170,7 @@ $(function(){
 			</colgroup>
 			<thead>
 				<tr class="table-dark">
-					<td>번호</td>
+					<td></td>
 					<td>시즌</td>
 					<td>브랜드</td>
 					<td>상품등급</td>
@@ -155,18 +179,14 @@ $(function(){
 					<td>컬러</td>
 					<td>사이즈</td>
 					<td>상품코드</td>
-					<td>정가</td>
-					<td>할인율</td>
-					<td>판매가</td>
-					<td>매장재고</td>
-					<td>타점재고</td>
-					<td>요청수량</td>
+					<td>이동재고</td>
+					<td>보유재고</td>
+
 				</tr>
 			</thead>
 			<tbody>
 			 	  <tr th:each="prod : ${products}">
-					<td th:text="${prodStat.index+1}"></td>
-				 	<input type="hidden" id="iNo" th:value="${prod.iNo}"/>
+					<td><input type="checkbox"/></td>
 	                <td id="season"  th:value="${prod.season}" th:text="${prod.season}"></td>
 					<td id="bCode" th:each="brand:${blist}" th:if="${brand.bCode eq prod.bCode}" th:value="${prod.bCode}" th:text="${brand.bName}"/>
 	                <td id="grade" th:value="${prod.grade}" th:text="${prod.grade} ? '스페셜':'일반'" />
@@ -174,15 +194,12 @@ $(function(){
 	                <td id="pNum" th:value="${prod.pNum}" th:text="${prod.pNum}"></td>
 	                <td id="color" th:value="${prod.color}" th:text="${prod.color}"></td>
 	                <td id="pSize"  th:value="${prod.pSize}" th:text="${prod.pSize}"></td>
-	                <td id="pSize"  th:value="${prod.pCode}" th:text="${prod.pCode}"></td>
-	                <td id="liPrice" th:value="${prod.liPrice}" th:text="${prod.liPrice}"></td>
-	                <td id="pSize"  th:value="${prod.discount}" th:text="${prod.discount}"></td>
-	                <td id="pSize"  th:value="${prod.pPrice}" th:text="${prod.pPrice}"></td>
-	                <td id="startCnt"  th:value="${prod.startCnt}" th:text="${prod.startCnt}"></td>
-	                <td id="arrCnt"  th:value="${prod.arrCnt}" th:text="${prod.arrCnt}"></td>	                 
-	                <td>
+	                <td id="pCode"  th:value="${prod.pCode}" th:text="${prod.pCode}"></td>
+	                <td id="startCnt"  th:value="${prod.movCnt}" th:text="${prod.movCnt}"></td>
+	                <td id="arrCnt"  th:value="${prod.cnt}" th:text="${prod.cnt}"></td>	                 
+<!-- 	                <td>
 	                     <input id="reqCnt" class="reqCnt"  type="number" style="width:80%;"/>
-	                 </td>
+	                 </td> -->
 				</tr> 			
 			</tbody>
 		</table>
@@ -191,7 +208,7 @@ $(function(){
 <div>
 	<div class="row justify-content-between align-items-center">
 		<div class="col-auto mb-3">		
-				<input type="button" id="btn" class="btn btn-primary" value="상품추가">		
+				<input type="button" id="btn" class="btn btn-primary" value="상품추가" onclick="chked();">		
 		</div>
 	</div>
 </div>
