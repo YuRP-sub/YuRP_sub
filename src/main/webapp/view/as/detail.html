@@ -63,7 +63,7 @@ as 디테일
 		  
 			<tr>
 				<th>NO</th>
-				<td th:text="${dto.aNo}"></td>
+				<td name="aNo" id="aNo" th:text="${dto.aNo}"></td>				
 				<th>매장코드</th>
 				<td th:text="${dto.sCode}"></td>
 				<th>매장명</th>
@@ -111,7 +111,7 @@ as 디테일
 			</tr>
 	
 			<tr>
-				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} == 'as'">
+<!-- 				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} == 'as'">
 					<a th:href="@{|/as/modify/${dto.aNo}|}">수락</a>
 					<a href="/as/list">목록으로</a>
 				</td>
@@ -122,11 +122,13 @@ as 디테일
 				
 				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} == 'admin'">
 					<a href="/as/list">목록으로</a>
-				</td>
+				</td> -->
 				
-				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} != 'as' and ${dto.asRes} == '수선전' and ${login.sCode} != 'admin'">
-					<a th:href="@{|/as/store/modify/${dto.aNo}|}">수정</a>
-					<a th:href="@{|/as/store/delete/${dto.aNo}|}" id="no">삭제</a>
+				<!-- <td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} != 'as' and ${dto.asRes} == '수선전' and ${login.sCode} != 'admin'"> -->
+				<td colspan="8" align="right" >
+					<a th:href="@{|/as/modify/${dto.aNo}|}">수정</a>
+					<a th:href="@{|/as/deleteReg/${dto.aNo}|}">삭제</a>
+					<!-- <input type="submit" class="btn btn-danger" value="삭제" formaction="deleteReg"> -->
 					<a href="/as/list">목록으로</a>
 				</td>
 			</tr>

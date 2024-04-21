@@ -12,14 +12,14 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface NoticeMapper {
 
-	@Select("select * from notice")
-	List<NoticeDTO> list(NoticeDTO dto);
+//	@Select("select * from notice")
+//	List<NoticeDTO> list(NoticeDTO dto);
 
 //	@Select("select * from NOTICE order by n_no desc limit #{startPage}, #{endPage}")
 //	List<NoticeDTO> list();
 	
-	@Select("select * from notice where n_no = #{nNo}")
-	NoticeDTO detail(int nNo);
+	@Select("select * from notice where n_no = #{no}")
+	NoticeDTO detail(int no);
 	
 	@Insert("insert into notice (title, content, file) values (#{title},#{content},#{file})")
 	int insert(NoticeDTO dto);
@@ -45,5 +45,5 @@ public interface NoticeMapper {
 		, " 	</if> "
 		, " </where> "
 		, " </script> "})
-	List<NoticeDTO> listPname(NoticeDTO dto);
+	List<NoticeDTO> list(NoticeDTO dto);
 }
