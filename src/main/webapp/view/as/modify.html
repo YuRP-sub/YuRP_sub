@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 	$(function() {
 		
@@ -43,7 +42,7 @@
 <body>
 as 매장수정
 
-<form action="" method="post" th:object="${dto}">
+<form action="modifyReg" method="post" th:object="${dto}">
 	<table border="">
 		<thead>
 		  <colgroup>
@@ -58,6 +57,7 @@ as 매장수정
 		<tr>
 			<th>접수번호</th>
 			<td th:text="${dto.asNum}"></td>
+			<input id="asNum" name="asNum" type="text" th:value="${dto.asNum}" />
 			<th>처리결과</th>
 			<td th:text="${dto.asRes}"></td>
 			<th>진행여부</th>
@@ -99,6 +99,7 @@ as 매장수정
 			<tr>
 				<td colspan="7" align="right">
 					<input type="submit" value="수정" id="ok"/>
+					<a th:href="@{|modifyReg/${dto.aNo}|}">수정</a>
 					<a href="/as/list">취소</a>
 				</td>
 			</tr>

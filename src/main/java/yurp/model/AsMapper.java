@@ -17,11 +17,11 @@ public interface AsMapper {
 //			+ "INNER JOIN store AS a ON a.s_code = ascenter.s_code")
 //	List<AsDTO> list(AsDTO dto);
 	
-	@Select("SELECT ascenter.*, a.s_name, b.p_name "
-			+ "FROM ascenter "
-			+ "INNER JOIN store AS a ON a.s_code = ascenter.s_code "
-			+ "INNER JOIN product AS b ON b.p_code = ascenter.p_code "
-			+ "WHERE ascenter.a_no = #{aNo}")
+	@Select("SELECT a.*, b.s_name, c.p_name "
+			+ "FROM ascenter as a "
+			+ "left JOIN store AS b ON b.s_code = a.s_code "
+			+ "left JOIN product AS c ON c.p_code = a.p_code "
+			+ "WHERE a.a_no = #{aNo}")
 	AsDTO detail(int aNo);
 	
 	//------본사
@@ -42,11 +42,15 @@ public interface AsMapper {
 	
 	@Update("update ascenter set "
 			+ "as_name = #{asName}, as_tel = #{asTel}, p_code = #{pCode}, as_note = #{asNote}, pur_date = #{purDate} "
-			+ "where a_no = #{aNo}")
+			//+ "where a_no = #{aNo}")
+			+ "where as_num = #{asNum}")
+	//int storeModify(int aNo);
 	int storeModify(AsDTO dto);
 	
-	@Delete("delete from ascenter where a_no = #{aNo}")
-	int delete(AsDTO dto);
+	@Delete(" delete "
+			+ " from ascenter "
+			+ " where a_no = #{aNo}")
+	int delete(int aNo);
 	
 	
 	//------검색
@@ -87,8 +91,10 @@ public interface AsMapper {
 	
 	@Select({
 		" <script> "
-		," SELECT ascenter.*, a.s_name as sName from ascenter "
-		, "INNER JOIN store AS a ON a.s_code = ascenter.s_code"
+		," SELECT a.*, "
+		, "b.s_name as sName "
+		, "from ascenter as a "
+		, "INNER JOIN store AS b ON a.s_code = b.s_code"
 		, " <where> "
 		, " 	<if test='start != null and start != \"\"' > "
 		, "			AND reg_date >= #{start} "

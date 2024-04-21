@@ -49,7 +49,7 @@
 </head>
 <body>
 <h1>as 매장추가</h1>
-<form action="" method="post" th:object="${dto}">
+<form action="insertReg" method="post" th:object="${dto}">
 
 	<table border="">
 		<thead>
@@ -90,7 +90,7 @@
 		 	<h1>접수 등록</h1>
  			<tr>
 				<th>접수번호</th>
-				<td><input id="asNum" type="text" name="asNum" /></td>
+				<td><input class="essential" id="asNum" type="text" name="asNum" /></td>
 			</tr>
 			<tr>
 				<th>매장코드</th>
