@@ -35,7 +35,7 @@ public interface ProductMapper {
 
 			+ "</where>"
 			+ "</script>")
-	List<ProductDTO> list(ArrayList<ProductDTO> arr);
+	List<ProductDTO> list(ProductDTO dto);
 	
 
 //창고재고
@@ -87,6 +87,10 @@ public interface ProductMapper {
 			+ "order by season desc")
 	List<String> seasonList();
 	
+	@Select("select * from store "
+			+ "where s_code not in ('as','admin')")
+	List<StoreDTO> storeList();
+	
 	
 	@Insert({
 		" <script> "
@@ -113,7 +117,22 @@ public interface ProductMapper {
 		, "</foreach>"
 		,"</script>"
 	})
-	int setInven(ArrayList<ProductDTO> arr);
+	int setInvenAdmin(ArrayList<ProductDTO> arr);
+	
+	@Insert({
+		"<script>"
+		,"insert into inventory "
+		,"(p_code, cnt, s_code) values "
+		, "<foreach collection='arr' item='prod' separator=',' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		, 	"<foreach collection='stArr' item='st' separator=',' index='i'>"
+		, 		"(#{prod.pCode}, 0, #{st.sCode}) "
+		,	 "</foreach>"
+		, "</if>"
+		, "</foreach>"
+		,"</script>"
+	})
+	int setInvenStore(ArrayList<ProductDTO> arr, ArrayList<StoreDTO> stArr);
 	
 	
 	@Select({

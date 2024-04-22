@@ -12,4 +12,9 @@ public class DTOs {
 	ArrayList<ProductDTO> prodArr;
 	
 	ArrayList<StoreOrderDTO> rtArr;
+	
+	ArrayList<InandoutDTO> ioArr;
+	ArrayList<InvenDTO> invenArr;
+	
+	ArrayList<StoreDTO> storeArr;
 }
