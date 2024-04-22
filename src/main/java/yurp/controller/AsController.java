@@ -78,47 +78,69 @@ public class AsController {
 	}
 
 	@RequestMapping("{service}/{no}")
-	String serviceNo(Model mm, @PathVariable int no, AsDTO dto, TemplateData templateData) {
+	String serviceNo(Model mm, @PathVariable int no, AsDTO dto, TemplateData templateData, HttpServletRequest request) {
 		templateData.setCate("as");
 		System.out.println(templateData.getService());
 		switch (templateData.getService()) {
 			 
 		case "modify":
 			mm.addAttribute("dto",mapper.detail(no));
-			
 			return "template";
 
 		case "deleteReg":
 			mapper.delete(no);
 			templateData.setMsg("삭제되었습니다.");
 			templateData.setGoUrl("/as/list");
+			
+		case "detail":
+			mm.addAttribute("dto", mapper.detail(no));
+			StoreDTO loginInfo = (StoreDTO) request.getSession().getAttribute("loginStore");
+			mm.addAttribute("login", loginInfo);
+			return "template";
 
 		}
 		return "inc/alert";
 	}
 
-	/** as 상세내역 */
-	@RequestMapping("detail/{aNo}")
-	String detail(Model mm, @PathVariable int aNo, HttpServletRequest request) {
-		mm.addAttribute("dto", mapper.detail(aNo));
-
-		StoreDTO loginInfo = (StoreDTO) request.getSession().getAttribute("loginStore");
-		mm.addAttribute("login", loginInfo);
-
-		return "as/detail";
-	}
 	/** as 접수처리 */
 	@GetMapping("accept/{aNo}")
 	String modifyForm(Model mm, AsDTO dto) {
 		mm.addAttribute("dto", mapper.detail(dto.getANo()));
 		return "as/accept";
 	}
-
+	
 	@PostMapping("accept/{aNo}")
 	String modifyReg(Model mm, AsDTO dto) {
 		mm.addAttribute("dto", mapper.modify(dto));
 		return "redirect:/as/detail/{aNo}";
 	}
+	
+	// -------검색기능
+	/** as 매장 검색 기능 */
+	@RequestMapping("sCodeSearch")
+	String sCodeSearch(Model mm, AsDTO dto) {
+		mm.addAttribute("sCodeSearch", mapper.sCodeSearch(dto));
+		return "as/sCodeSearch";
+	}
+
+	/** as 상품 검색 기능 */
+	@RequestMapping("pCodeSearch")
+	String pCodeSearch(Model mm, AsDTO dto) {
+		mm.addAttribute("pCodeSearch", mapper.pCodeSearch(dto));
+		return "as/pCodeSearch";
+	}
+	/** as 상세내역 */
+//	@RequestMapping("detail/{aNo}")
+//	String detail(Model mm, @PathVariable int aNo, TemplateData templateData, HttpServletRequest request) {
+//		templateData.setCate("detail");
+//		mm.addAttribute("dto", mapper.detail(aNo));
+//
+//		StoreDTO loginInfo = (StoreDTO) request.getSession().getAttribute("loginStore");
+//		mm.addAttribute("login", loginInfo);
+//
+//		//return "as/detail";
+//		return "template";
+//	}
 
 	// -----매장
 	/** as 접수:매장 */
@@ -156,18 +178,5 @@ public class AsController {
 //		return "redirect:/as/list";
 //	}
 
-	// -------검색기능
-	/** as 매장 검색 기능 */
-	@RequestMapping("sCodeSearch")
-	String sCodeSearch(Model mm, AsDTO dto) {
-		mm.addAttribute("sCodeSearch", mapper.sCodeSearch(dto));
-		return "as/sCodeSearch";
-	}
 
-	/** as 상품 검색 기능 */
-	@RequestMapping("pCodeSearch")
-	String pCodeSearch(Model mm, AsDTO dto) {
-		mm.addAttribute("pCodeSearch", mapper.pCodeSearch(dto));
-		return "as/pCodeSearch";
-	}
 }

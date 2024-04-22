@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 	$(function() {
 		$("#no").click(function() {
@@ -48,93 +47,92 @@
 as 디테일
 
 <section>
-	<table border="">
+<div class="tableBox mb-3">
+	<table class="table table-striped-columns">
+		<colgroup>
+		  <col width="10%" />
+		  <col width="10%" />
+		  <col width="10%" />
+		  <col width="10%" />
+		  <col width="10%" />
+		  <col width="20%" />
+		  <col width="10%" />
+		  <col width="20%" />
+		</colgroup>
 		<thead>
-		  <colgroup>
-		    <col width="10%" />
-		    <col width="10%" />
-		    <col width="10%" />
-		    <col width="10%" />
-		    <col width="10%" />
-		    <col width="20%" />
-		    <col width="10%" />
-		    <col width="20%" />
-		  </colgroup>
-		  
 			<tr>
-				<th>NO</th>
+				<th class="table-dark top">NO</th>
 				<td name="aNo" id="aNo" th:text="${dto.aNo}"></td>				
-				<th>매장코드</th>
+				<th class="table-dark top">매장코드</th>
 				<td th:text="${dto.sCode}"></td>
-				<th>매장명</th>
+				<th class="table-dark top">매장명</th>
 				<td th:text="${dto.sName}"></td>
-				<th>접수일</th>
+				<th class="table-dark top">접수일</th>
 				<td th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></td>
 			</tr>
 			<tr>
-				<th>접수번호</th>
+				<th class="table-dark top">접수번호</th>
 				<td th:text="${dto.asNum}"></td>
-				<th>처리결과</th>
+				<th class="table-dark top">처리결과</th>
 				<td th:text="${dto.asRes}"></td>
-				<th>진행여부</th>
+				<th class="table-dark top">진행여부</th>
 				<td th:text="${dto.asProg}"></td>
-				<th>처리일</th>
+				<th class="table-dark top">처리일</th>
 				<td th:text="${#dates.format(dto.fixDate, 'yyyy-MM-dd')}"></td>
 			</tr>
 			<tr>
-				<th>고객성함</th>
+				<th class="table-dark top">고객성함</th>
 				<td th:text="${dto.asName}" colspan="7"></td>
 			</tr>
 			<tr>
-				<th>고객연락처</th>
+				<th class="table-dark top">고객연락처</th>
 				<td th:text="${dto.asTel}" colspan="7"></td>
 			</tr>
 			<tr>
-				<th>상품명</th>
+				<th class="table-dark top">상품명</th>
 				<td th:text="${dto.pName}" colspan="7"></td>
 			</tr>
 			<tr>
-				<th>구매날짜</th>
+				<th class="table-dark top">구매날짜</th>
 				<td th:text="${#dates.format(dto.purDate, 'yyyy-MM-dd')}" colspan="7"></td>
 			</tr>
 			<tr>
-				<th>의뢰내용</th>
+				<th class="table-dark top">의뢰내용</th>
 				<td th:text="${dto.asNote}" colspan="7"></td>
 			</tr>
 			<tr>
-				<th>처리내용</th>
+				<th class="table-dark top">처리내용</th>
 				<td th:text="${dto.resCon}" colspan="7"></td>
 			</tr>
 			<tr>
-				<th>수선비</th>
+				<th class="table-dark top">수선비</th>
 				<td th:text="${dto.asPrice}" colspan="7"></td>
 			</tr>
 	
 			<tr>
-<!-- 				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} == 'as'">
+				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.auth} == 'AS'">
 					<a th:href="@{|/as/modify/${dto.aNo}|}">수락</a>
 					<a href="/as/list">목록으로</a>
 				</td>
 				
-				<td colspan="8" align="right" th:if="${dto.asRes} != '수선전'">
+<!-- 			<td colspan="8" align="right" th:if="${dto.asRes} != '수선전'">
 					<a href="/as/list">목록으로</a>
-				</td>
+				</td> 
 				
-				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} == 'admin'">
+				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.auth} == '관리자'">
 					<a href="/as/list">목록으로</a>
 				</td> -->
 				
-				<!-- <td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.sCode} != 'as' and ${dto.asRes} == '수선전' and ${login.sCode} != 'admin'"> -->
+				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.auth} != 'AS' and ${dto.asRes} == '수선전' and ${login.auth} != '관리자'">
 				<td colspan="8" align="right" >
-					<a th:href="@{|/as/modify/${dto.aNo}|}">수정</a>
-					<a th:href="@{|/as/deleteReg/${dto.aNo}|}">삭제</a>
-					<!-- <input type="submit" class="btn btn-danger" value="삭제" formaction="deleteReg"> -->
-					<a href="/as/list">목록으로</a>
+					<a th:href="@{|/as/modify/${dto.aNo}|}" class="btn btn-dark">수정</a>
+					<a th:href="@{|/as/deleteReg/${dto.aNo}|}" class="btn btn-dark">삭제</a>
+					<a href="/as/list" class="btn btn-dark">목록으로</a>
 				</td>
 			</tr>
 		</thead>
 	</table>
+</div>
 </section>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>

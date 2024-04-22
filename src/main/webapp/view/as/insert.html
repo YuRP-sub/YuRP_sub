@@ -48,37 +48,58 @@
 </script>
 </head>
 <body>
-<h1>as 매장추가</h1>
+<section>
+<h1>as 등록</h1>
 <form action="insertReg" method="post" th:object="${dto}">
-
-	<table border="">
-		<thead>
+<div class="tableBox mb-3">
+	<table class="table table-striped-columns">
 		  <colgroup>
-		    <col width="30%" />
-		    <col width="70%" />
+			<col style="" />
+			<col style="" />
+			<col style="" />
+			<col style="" />
 		  </colgroup>
-		  
-		   <h1>고객 정보</h1>
-			   	<tr>
-					<th>고객명</th>
-					<td><input class="essential" id="asName" type="text" name="asName"/></td>
-				</tr>
-				<tr>
-					<th>고객연락처</th>
-					<td><input class="essential" id="asTel" type="text" name="asTel"/></td>
-				</tr>
-				<tr>
-					<th>구매날짜</th>
-					<td><input class="essential" id="purDate" type="date" name="purDate"/></td>
-				</tr>
-				<tr>
-					<th>의뢰내용</th>
-					<td><textarea class="essential" id="asNote" rows="5" cols="50" name="asNote"></textarea></td>
-				</tr>
+		<thead>
+		<tbody>
+		   	<tr>
+				<th class="table-dark top">고객명</th>
+				<td><input class="essential" id="asName" type="text" name="asName"/></td>
+				<th class="table-dark top">접수번호</th>
+				<td><input class="essential" id="asNum" type="text" name="asNum" /></td>
+			</tr>
+			<tr>
+				<th class="table-dark top">고객연락처</th>
+				<td><input class="essential" id="asTel" type="text" name="asTel"/></td>
+				<th class="table-dark top">매장코드</th>
+				<td><input class="essential" id="storeCode" type="text" name="sCode"/><button id="sCodeSearch">조회</button></td>
+			</tr>
+			<tr>
+				<th class="table-dark top">구매날짜</th>
+				<td><input class="essential" id="purDate" type="date" name="purDate"/></td>
+				<th class="table-dark top">매장명</th>
+				<td><input class="essential" id="storeName" type="text" name="sName"/></td>
+			</tr>
+			<tr>
+				<th class="table-dark top">상품코드</th>
+				<td><input class="essential" id="productCode" type="text" name="pCode"/><button id="pCodeSearch">조회</button></td>
+				<th class="table-dark top">상품명</th>
+				<td><input class="essential" id="productName" type="text" name="pName"/></td>
+			</tr>
+			<tr>
+				<th class="table-dark top">의뢰내용</th>
+				<td colspan="3"><textarea class="essential" id="asNote" rows="12" cols="120" name="asNote" style="resize:none;"></textarea></td>
+			</tr>
+		</tbody>
 		 </thead>
 	</table>
-
-
+</div>
+	<div class="row justify-content-end align-items-center">
+		<div class="col-auto mb-3">				
+			<input type="submit" value="접수" id="ok" class="btn btn-dark"/>
+			<a href="/as/list" class="btn btn-dark">취소</a>
+		</div>
+	</div>
+<!-- 
 
 	<table border="">
 		<thead>
@@ -86,8 +107,6 @@
 		    <col width="30%" />
 		    <col width="70%" />
 		  </colgroup>
-
-		 	<h1>접수 등록</h1>
  			<tr>
 				<th>접수번호</th>
 				<td><input class="essential" id="asNum" type="text" name="asNum" /></td>
@@ -106,7 +125,7 @@
 			</tr>
 			<tr>
 				<th>상품명</th>
-				<td><input class="essential" id="productName" type="text" name="pName"/></td>
+				<t><input class="essential" id="productName" type="text" name="pName"/></td>
 			</tr>
 
 			
@@ -117,7 +136,8 @@
 				</td>
 			</tr>
 		</thead>
-	</table>
+	</table> -->
 </form>
+</section>
 </body>
 </html>

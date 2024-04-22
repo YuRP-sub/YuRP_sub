@@ -144,7 +144,6 @@ $(function(){
 					<td>번호</td>
 					<td>등록날짜</td>
 					<td>전표번호</td>
-					<td>입출고</td>
 					<td>상태</td>
 					<td>출발매장</td>
 					<td>도착매장</td>
@@ -158,19 +157,17 @@ $(function(){
 					<td th:text="${dto.ioNo}"></td>
 					<td th:text="${dto.regDate}"></td>
 					<td th:text="${dto.ioStat}"></td>
-					<td th:text="${dto.type1}"></td>
-					<td th:text="${dto.type2}"></td>
+					<td th:text="${dto.type}"></td>
 					<td th:text="${dto.start}"></td>
 					<td th:text="${dto.arrival}"></td>
 					<td th:text="${dto.totCnt}"></td>
 					<td th:text="${#numbers.formatInteger(dto.totPrice, 3, 'COMMA')}"></td>
-					<td th:text="${dto.rStat}"></td>
+					<td th:text="${dto.process}"></td>
 				</tr> 
 			</tbody>
 			<tfoot class="table-group-divider">
 				<tr class="tot table-secondary" th:each="dto2 : ${totData}">
 					<td>통계</td>
-					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
