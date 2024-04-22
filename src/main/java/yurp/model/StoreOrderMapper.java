@@ -91,9 +91,11 @@ public interface StoreOrderMapper {
 	@Select("select * from store")
 	List<StoreDTO> slist();
 	
-
 	@Select("select * from brand")
 	List<BrandDTO> blist();
+
+	@Select("select * from product")
+	List<ProductDTO> plist();
 	
 	@Select("select max(r_stat) from rt where request_date = CURDATE()")
 	String maxStat();

@@ -1,6 +1,7 @@
 package yurp.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import yurp.model.ArrayDTO;
 import yurp.model.DTOs;
+import yurp.model.InandoutMapper;
 import yurp.model.OrdersDTO;
 import yurp.model.ProductDTO;
 import yurp.model.ProductMapper;
@@ -31,6 +33,9 @@ public class StoreOrderController {
 	
 	@Resource
 	ProductMapper pmapper;
+	
+	@Resource
+	InandoutMapper inandoutmapper;
 	
 	
 	@ModelAttribute
@@ -71,12 +76,8 @@ public class StoreOrderController {
 			
 			mm.addAttribute("stat",st);
 			mm.addAttribute("slist",mapper.slist());
+			mm.addAttribute("plist",mapper.plist());
 			break;
-			
-		case "prodAdd":
-			mm.addAttribute("blist",mapper.blist());
-			mm.addAttribute("prod",pmapper.storeOrderS(pdto));
-			break;	
 		}
 		
 		return "template";
@@ -116,9 +117,26 @@ public class StoreOrderController {
 //	void prodAdd(Model model, ProductDTO dto) {
 //
 //		model.addAttribute("blist",mapper.blist());
-//		model.addAttribute("prod",pmapper.storeOrderS(dto));
+//		model.addAttribute("products",pmapper.storeOrderS(dto));
 //
 //	}
+	
+	@GetMapping("prodAdd")
+	void prodAdd(Model mm, HttpServletRequest request) {
+		HashMap<String,String> param = new HashMap<>();
+		String bCode = request.getParameter("bCode");
+		String pCode = request.getParameter("pCode");
+		param.put("start", request.getParameter("start"));
+		param.put("bCode", bCode);
+		param.put("pCode", pCode);
+
+		System.out.println("pcode: "+pCode);
+		mm.addAttribute("blist",pmapper.brandList());
+
+		if(pCode!="" && pCode!=null || bCode!=null) {			
+			mm.addAttribute("products",inandoutmapper.storeProdList(param));
+		}	
+	}
 	
 	@PostMapping("insert")
 	String excel(HttpServletRequest request,StoreOrderDTO dto,DTOs dtos) {
