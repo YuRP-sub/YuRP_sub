@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class InvenDTO {
-	int iNo, cnt,liPrice, pPrice;
-	String pName, season, color, pSize, pm, plus;
+	int iNo, movCnt, cnt, liPrice, pPrice;
+	String pName, season, color, pSize, pm, plus, pCode, sCode;
 	
 }
 

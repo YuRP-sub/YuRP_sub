@@ -43,7 +43,7 @@ public class ProductController {
 	}
 
 	@RequestMapping("{service}")	/// list, insert, modify
-	String productList(Model mm, DTOs dtos, TemplateData templateData) {
+	String productList(Model mm, DTOs dtos, ProductDTO dto, TemplateData templateData) {
 		
 		templateData.setCate("stock/product");
 		
@@ -55,13 +55,15 @@ public class ProductController {
 //		}
 		switch(templateData.getService()) {
 		case "list":
+			System.out.println("검색 ㄱ ? :"+dto);
 			mm.addAttribute("seasonData", mapper.seasonList());
 			mm.addAttribute("brandData", mapper.brandList());
-			mm.addAttribute("productData", mapper.list(dtos.getProdArr()));
+			mm.addAttribute("productData", mapper.list(dto));
 			break;
 			
 		case "insert":
 			mm.addAttribute("brandData", mapper.brandList());
+			mm.addAttribute("storeData", mapper.storeList());
 			break;
 		case "modify":
 			mm.addAttribute("productData", mapper.modList(dtos.getProdArr()));
@@ -79,7 +81,8 @@ public class ProductController {
 		switch(templateData.getService()) {
 		case "insertReg":
 			mapper.insert(dtos.getProdArr());
-			mapper.setInven(dtos.getProdArr());
+			mapper.setInvenAdmin(dtos.getProdArr());
+			mapper.setInvenStore(dtos.getProdArr(), dtos.getStoreArr());
 			templateData.setMsg("상품이 추가되었습니다.");
 			templateData.setGoUrl("list");
 			break;

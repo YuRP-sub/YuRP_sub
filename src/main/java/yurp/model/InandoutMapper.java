@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface InandoutMapper {
@@ -159,7 +161,8 @@ public interface InandoutMapper {
 			+   "p.b_code=#{bCode} and "
 			+   "</if>"			
 			+ 	"<if test='pCode != null and pCode != \"\"'> "
-			+ 	"p.p_code like concat('%',#{pCode},'%') "
+			+ 	"p.p_code like concat('%',#{pCode},'%') and "
+			+ 	"cnt &gt; 0 "
 			+ 	"</if>"
 			+ "	</trim>"
 			+ "</where>"
@@ -167,25 +170,81 @@ public interface InandoutMapper {
 	List<ProductDTO> storeProdList(HashMap<String, String> param);
 	
 	
-//	@Select({"<script>"
-//		, "<foreach collection='arr' item='prod' separator=' ' index='i'>"
-//		, "select * from product p "
-//		, "where p_code = #{prod};"
-//		, "</foreach>"
-//		,"</script>"})
 	@Select({
 		" <script> "
-		,"select * from product "
-		, "<where> "
-		, "p_code in ("
+		,"select p.*, i.cnt, i.mov_cnt, i.s_code, b.b_name "
+		, "from product p "
+		, "join inventory as i on p.p_code = i.p_code "
+		, "join brand as b on p.b_code = b.b_code "
+		, "<where> "	
+		, "p.p_code in ("
 		, "<foreach collection='arr' item='prod' separator=',' index='i'> "
 		, "<if test='prod != null'> "
 		, "#{prod} "
 		, "</if> "
 		, "</foreach> "
-		, ")"
+		, ") and "
+		, "i.s_code=#{start} "	
 		, "</where> "
 		, "</script> "
 	})
-	List<ProductDTO> add(String [] arr);
+	List<ProductDTO> add(String [] arr, String start);
+
+
+
+	@Insert({
+		"<script> "
+		,"insert into inandout "
+		, "(io_stat, type, start, arrival, tot_price, tot_cnt, process, s_code) values "
+		, "<if test='arrival != null'> "
+		, "(#{ioStat}, #{type}, #{start}, "
+		, "#{arrival}, #{totPrice}, #{totCnt}, '미처리', #{start}) "
+		, "</if>"
+		, "</script>"})
+	int insertIo(InandoutDTO dto);
+
+	
+	@Insert({
+		"<script>"
+		,"insert into iodetail "
+		,"(io_stat, price, cnt, b_code, p_code, s_code) values "
+		, "<foreach collection='arr' item='prod' separator=',' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		, "(#{prod.ioStat}, #{prod.price}, #{prod.cnt}, #{prod.bCode}, #{prod.pCode}, #{prod.start}) "
+		, "</if>"
+		, "</foreach>"
+		,"</script>"
+	})
+	int insertIoDetail(ArrayList<InandoutDTO> arr);
+	
+	@Insert({
+		"<script>"
+		, "<foreach collection='arr' item='prod' separator=' ' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		,"update inventory set "
+		,"mov_cnt=#{prod.cnt} "
+		, "where s_code=#{prod.arrival} and p_code=#{prod.pCode}; "
+		,"update inventory set "
+		,"cnt=#{prod.resCnt} "
+		, "where s_code=#{prod.start} and p_code=#{prod.pCode}; "
+		, "</if>"
+		, "</foreach>"
+		,"</script>"
+	})
+	int calcInven(ArrayList<InandoutDTO> arr);
+	
+	@Update({
+		" <script> "
+		, "<foreach collection='arr' item='prod' separator=' ' index='i'> "
+		,"update product set "
+		, "b_code=#{prod.bCode}, season=#{prod.season}, grade=#{prod.grade}, p_name=#{prod.pName}, p_num=#{prod.pNum}, color=#{prod.color}, p_size=#{prod.pSize}, p_code=#{prod.pCode}, li_price=#{prod.liPrice}, discount=#{prod.discount}, p_price=#{prod.pPrice} "
+		, "where "
+		, "p_no = #{prod.pNo}; "
+		, "</foreach> "
+		, "</script> "
+	})
+	int removeCnt(ArrayList<InandoutDTO> arr);
+
+	
+	
 }

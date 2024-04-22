@@ -162,6 +162,9 @@
 
 <section>
 	<form action="insertReg" method="post">
+		<th:block th:each="st : ${storeData}">		
+			<input type="hidden" th:name="|storeArr[${stStat.index}].sCode|" th:value="${st.sCode}" />			
+		</th:block>
 		<div class="tableBox mb-3">
 			<table class="table table-striped-columns">
 				<colgroup>
