@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YuRP</title>
+
 <style>	
 	section {
 		width: 100%;
@@ -57,7 +52,7 @@
 
 </style>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script>
+<script th:inline="javascript">
 	$(function(){
 		
 		$("#delete").on("click",function(){
@@ -70,8 +65,8 @@
 		
 		var prodChk = 0;
 		$("#prodAdd").on("click",function(){
-			
-		     window.open("prodAdd", "_blank", "width=1000,height=600");
+			var start = [[${session.loginStore.sCode}]]
+		     window.open("prodAdd?start="+start, "_blank", "width=1000,height=600");
 	
 		
 		});
@@ -91,25 +86,31 @@
 			 var tr = $("<tr>")
 			 tr.append($("<td>").append($("<input type='checkbox'>")));
 			 tr.append($("<td>").text(i+1+prodChk));
+			 tr.append($("<td>").text(arr[i].season));
 			 tr.append($("<td>").text(arr[i].bCode));
+			 tr.append($("<td>").text(arr[i].pName));
 			 tr.append($("<td>").text(arr[i].pNum)); 
 			 tr.append($("<td>").text(arr[i].color));
 			 tr.append($("<td>").text(arr[i].pSize));
+			 tr.append($("<td>").text(arr[i].pCode));
 			 tr.append($("<td>").text(arr[i].liPrice));
-			 tr.append($("<td>").text(arr[i].pName));
-			 tr.append($("<td>").text(arr[i].storeCnt)); 
-			 tr.append($("<td>").text(arr[i].adminCnt)); 
+			 tr.append($("<td>").text(arr[i].discount));
+			 tr.append($("<td>").text(arr[i].pPrice));
 			 tr.append($("<td>").text(arr[i].reqCnt));
 			
 			 
 			 
 			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].iNo' value='"+arr[i].iNo+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].season' value='"+arr[i].season+"'>"));
 			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].bCode' value='"+arr[i].bCode+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pName' value='"+arr[i].pName+"'>"));
 			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pNum' value='"+arr[i].pNum+"'>"));
 			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].color' value='"+arr[i].color+"'>"));
 			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pSize' value='"+arr[i].pSize+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pCode' value='"+arr[i].pCode+"'>"));
 			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].liPrice' value='"+arr[i].liPrice+"'>"));
-			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pName' value='"+arr[i].pName+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].discount' value='"+arr[i].discount+"'>"));
+			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].pPrice' value='"+arr[i].pPrice+"'>"));
 			 tr.append($("<input type='hidden' name='rtArr["+parseInt(i+prodChk)+"].reqCnt' value='"+arr[i].reqCnt+"'>")); 
 		 	 
 
@@ -143,6 +144,7 @@
 
 <section>
 	<form action="insert" method="post">
+	
 		<div class="searchBox container mb-3 border-bottom">
 			<div class="row g-3 align-items-center">	
 				<div class="col-md-auto">				
@@ -207,19 +209,22 @@
 				<tr class="table-dark top">
 					<td></td>
 					<td>no</td>
+					<td>시즌</td>
 					<td>브랜드</td> 
+					<td>품명</td>
 					<td>품번</td>
 					<td>컬러</td>
 					<td>사이즈</td>
-					<td>가격</td>
-					<td>품명</td>
-					<td>매장재고</td>
-					<td>창고재고</td>
-					<td>요청수량</td>
+					<td>상품코드</td>					
+					<td>정가</td>
+					<td>할인율</td>
+					<td>판매가</td>
+					<td>출고수량</td>
+					<td>총액</td>
 				</tr>
 			</thead>
 				<tbody class="prod">
-					
+
 				</tbody>
 		</table>
 	</div>
@@ -238,5 +243,3 @@
 	</div>
 	</form>
 </section>
-</body>
-</html>
