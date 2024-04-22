@@ -80,14 +80,14 @@
 			</tr>
 		</tbody>
 			<tr>
-				<td colspan="6" align="right" th:if="${login.sCode} == 's0001'">
-					<a th:href="@{|/notice/modify/${dto.nNo}|}">수정</a>
-					<a th:href="@{|/notice/delete/${dto.nNo}|}" id="no">삭제</a>
-					<a href="/notice/list">목록으로</a>
+				<td colspan="6" align="right" th:if="${login.auth} == '관리자'">
+					<a th:href="@{|/notice/modify/${dto.nNo}|}" class="btn btn-dark">수정</a>
+					<a th:href="@{|/notice/delete/${dto.nNo}|}" class="btn btn-dark" id="no">삭제</a>
+					<a href="/notice/list" class="btn btn-dark">목록으로</a>
 				</td>
 	
-				<td colspan="6" align="right" th:if="${login.sCode} != 's0001'">
-					<a href="/notice/list">목록으로</a>
+				<td colspan="6" align="right" th:if="${login.auth} != '관리자'">
+					<a href="/notice/list" class="btn btn-dark">목록으로</a>
 				</td>
 			</tr>
 		</thead>

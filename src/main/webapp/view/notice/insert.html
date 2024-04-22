@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 	$(function() {
 		$("#ok").click(function() {
@@ -24,27 +23,28 @@
 </head>
 <body>
 공지 추가
-
+<section>
 <form action="insertReg" method="post" enctype="multipart/form-data">
-	<table border="">
+<div class="tableBox mb-3">
+	<table class="table table-striped-columns">
 		<thead>
 		  <colgroup>
-		    <col width="20%" />
-		    <col width="80%" />
+		    <col style="" />
+		    <col style="" />
 		  </colgroup>
 			
 			<tr>
-				<th>제목</th>
+				<th class="table-dark top">제목</th>
 				<td>
 					<input type="text" name="title" id="title"/>
 				</td>
 			</tr>
-				<th>내용</th>
+				<th class="table-dark top">내용</th>
 				<td>
-					<textarea rows="5" cols="50" name="content" id="content"></textarea>
+					<textarea rows="12" cols="120" name="content" id="content" style="resize: none;"></textarea>
 				</td>
 			</tr>
-				<th>파일</th>
+				<th class="table-dark top">파일</th>
 				<td>
 					<input type="file" name="upFile" accept=".jpg, .png" multiple/>
 				</td>
@@ -52,12 +52,14 @@
 			
 			<tr>
 				<td colspan="2" align="right">
-					<input type="submit" value="작성" id="ok"/>
-					<a href="/notice/list">취소</a>
+					<input type="submit" value="작성" id="ok" class="btn btn-dark"/>
+					<a href="/notice/list" class="btn btn-dark">취소</a>
 				</td>
 			</tr>
 		</thead>
 	</table>
+</div>
 </form>
+</section>
 </body>
 </html>
