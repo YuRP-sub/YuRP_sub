@@ -57,7 +57,7 @@ as 매장수정
 		<tr>
 			<th>접수번호</th>
 			<td th:text="${dto.asNum}"></td>
-			<input id="asNum" name="asNum" type="text" th:value="${dto.asNum}" />
+			<input type="hidden" name="asNum" th:value="${dto.asNum}"/>
 			<th>처리결과</th>
 			<td th:text="${dto.asRes}"></td>
 			<th>진행여부</th>

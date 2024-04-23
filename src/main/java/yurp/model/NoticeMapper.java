@@ -44,6 +44,7 @@ public interface NoticeMapper {
 		, " 		AND content like concat('%', #{content}, '%')"
 		, " 	</if> "
 		, " </where> "
+		, " order by reg_date desc   "
 		, " </script> "})
 	List<NoticeDTO> list(NoticeDTO dto);
 }

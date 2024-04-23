@@ -42,6 +42,12 @@ public interface InandoutMapper {
 			+ "			reg_date >= #{sday} and"
 			+ "		</if> "
 			
+			+ "		<if test='sName != null and sName != \"\"' > "
+			+ "			start like concat('%',#{sName},'%') or "
+			+ "			arrival like concat('%',#{sName},'%') and "
+			+ "		</if> "
+
+			
 			+ "		<if test='eday != null and eday != \"\"' > "
 			+ "			 #{eday} >= reg_date and"
 			+ "		</if> "
@@ -244,6 +250,5 @@ public interface InandoutMapper {
 	})
 	int removeCnt(ArrayList<InandoutDTO> arr);
 
-	
 	
 }

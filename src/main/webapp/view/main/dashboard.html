@@ -19,11 +19,11 @@
 
 
 <div class="row g-3 justify-content-around" style="margin-top: 80px">
-	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/notice/list"'><b>공지사항</b></div>
+	<div  class="dashBtn col-md-5 mb-3" onclick='location.href="/notice/list"'><b>공지사항</b></div>
 	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/stock/sales/list"'><b>상품판매현황</b></div>
 	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/stock/inandout/list"'><b>입/출고 관리</b></div>
 	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/storeOrder/list"'><b>매장 수주/발주</b></div>
-	<div th:if="${session.loginStore.auth eq 'AS'}" class="dashBtn col-md-8" onclick='location.href="/notice/list"'><b>AS 진행 현황</b></div>
+	<div th:if="${session.loginStore.auth eq 'AS'}" class="dashBtn col-md-5 mb-3" onclick='location.href="/as/list"'><b>AS 진행 현황</b></div>
 
 </div>
 

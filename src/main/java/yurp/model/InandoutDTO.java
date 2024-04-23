@@ -9,6 +9,9 @@ public class InandoutDTO {
 	process, eday,sday,regDate,pName,pNum,color,pSize,season,
 	bName,sName,grade,search;
 	
+	int sellNo,allTot,sNo,pNo;
+	String end, addr, sellDate, manager;
+	
 }
 
 
