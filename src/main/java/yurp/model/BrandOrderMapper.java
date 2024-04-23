@@ -65,8 +65,8 @@ public interface BrandOrderMapper {
 	@Select("select * from brand")
 	List<BrandDTO> blist();
 	
-	@Select("select * from brand where b_name = #{bName}")
-	BrandDTO bdetail(String bName);
+	@Select("select * from brand where b_code = #{bCode}")
+	BrandDTO bdetail(String bCode);
 	
 	@Insert("insert into brand (b_name,b_code,addr,tel,email) values "
 			+ "(#{bName},#{bCode},#{addr},#{tel},#{email})")
