@@ -210,7 +210,7 @@ function setPrice(n){
 							<span class="input-group-text">출고 유형</span>
 							<select class="form-select" name="type" th:switch="${session.loginStore.auth}">
 								<th:block th:case="관리자">
-									<option value="일반매장출고">일반매장출고</option>
+									<option value="매장출고">매장출고</option>
 								</th:block>
 	
 								<th:block th:case="매장">

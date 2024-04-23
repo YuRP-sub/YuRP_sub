@@ -91,10 +91,12 @@ public class ProductController {
 			mapper.modReg(dtos.getProdArr());
 			templateData.setMsg("상품이 수정되었습니다.");
 			templateData.setGoUrl("list");
+			break;
 		case "delete":
 			mapper.delete(dtos.getProdArr());
 			templateData.setMsg("상품이 삭제되었습니다.");
 			templateData.setGoUrl("list");
+			break;
 		}
 		
 		return "inc/alert";

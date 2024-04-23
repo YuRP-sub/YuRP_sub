@@ -65,7 +65,7 @@
 				<th class="table-dark top">고객명</th>
 				<td><input class="essential" id="asName" type="text" name="asName"/></td>
 				<th class="table-dark top">접수번호</th>
-				<td><input class="essential" id="asNum" type="text" name="asNum" /></td>
+				<td><input class="essential" id="asNum" type="text" name="asNum" th:value="|AS${session.loginStore.sCode}${#dates.format(#dates.createNow(), 'yyMMddHHmmSS')}|" readonly/></td>
 			</tr>
 			<tr>
 				<th class="table-dark top">고객연락처</th>

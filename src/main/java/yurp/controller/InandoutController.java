@@ -22,6 +22,7 @@ import yurp.model.InandoutDTO;
 import yurp.model.InandoutMapper;
 import yurp.model.ProductDTO;
 import yurp.model.ProductMapper;
+import yurp.model.SellDTO;
 import yurp.model.StoreDTO;
 import yurp.model.TemplateData;
 
@@ -63,6 +64,7 @@ public class InandoutController {
 		
 		return "template";
 	}
+	
 	
 	@RequestMapping("detail")
 	String viewDetail(Model mm, InandoutDTO dto) {

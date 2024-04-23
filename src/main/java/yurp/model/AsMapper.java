@@ -106,7 +106,7 @@ public interface AsMapper {
 		, "			AND reg_date BETWEEN #{start} and #{end} "
 		, " 	</if> "
 		, " 	<if test='sName != null'> "
-		, " 		AND a.s_name = #{sName} "
+		, " 		AND b.s_name = #{sName} "
 		, " 	</if> "
 		, " 	<if test='asRes != null'> "
 		, " 		AND as_res = #{asRes} "

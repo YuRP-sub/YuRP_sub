@@ -62,7 +62,7 @@ as 디테일
 		<thead>
 			<tr>
 				<th class="table-dark top">NO</th>
-				<td name="aNo" id="aNo" th:text="${dto.aNo}"></td>				
+				<td name="aNo" id="aNo" th:text="${dto.aNo}"></td>		
 				<th class="table-dark top">매장코드</th>
 				<td th:text="${dto.sCode}"></td>
 				<th class="table-dark top">매장명</th>
@@ -110,21 +110,20 @@ as 디테일
 			</tr>
 	
 			<tr>
-				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.auth} == 'AS'">
-					<a th:href="@{|/as/modify/${dto.aNo}|}">수락</a>
-					<a href="/as/list">목록으로</a>
+				<td colspan="8" align="right" th:if="${dto.asRes == '수선전' && login.auth == 'AS'} ">
+					<a th:href="@{|/as/accept/${dto.aNo}|}">수락</a>
+					<a href="/as/list">목록으 로</a>
 				</td>
 				
-<!-- 			<td colspan="8" align="right" th:if="${dto.asRes} != '수선전'">
+ 				<td colspan="8" align="right" th:if="${dto.asRes != '수선전'}"> 
 					<a href="/as/list">목록으로</a>
 				</td> 
 				
-				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.auth} == '관리자'">
+				<td colspan="8" align="right" th:if="${dto.asRes == '수선전' && login.auth == '관리자'}">
 					<a href="/as/list">목록으로</a>
-				</td> -->
+				</td>
 				
-				<td colspan="8" align="right" th:if="${dto.asRes} == '수선전' and ${login.auth} != 'AS' and ${dto.asRes} == '수선전' and ${login.auth} != '관리자'">
-				<td colspan="8" align="right" >
+				<td colspan="8" align="right" th:if="${dto.asRes== '수선전' && login.auth == '매장'} ">
 					<a th:href="@{|/as/modify/${dto.aNo}|}" class="btn btn-dark">수정</a>
 					<a th:href="@{|/as/deleteReg/${dto.aNo}|}" class="btn btn-dark">삭제</a>
 					<a href="/as/list" class="btn btn-dark">목록으로</a>
