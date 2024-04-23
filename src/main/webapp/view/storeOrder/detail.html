@@ -1,20 +1,68 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>YuRP</title>
-</head>
-<body>
-	<tr th:each="detail : ${detailData}">
-		<td th:text="${detailStat.index+1}"></td>
-		<td th:text="${detail.bCode}"></td>
-		<td th:text="${detail.pNum}">품번</td>
-		<td th:text="${detail.color}">컬러</td>
-		<td th:text="${detail.pSize}">사이즈</td>
-		<td th:text="${detail.pName}">품명</td>
-		<td th:text="${detail.storeCnt}">매장수량</td>
-		<td th:text="${detail.adminCnt}">창고수량</td>
-		<td th:text="${detail.reqCnt}">요청수량</td>
-	</tr>
-</body>
-</html>
+
+<form action="">
+	<table class="table table-striped-columns">
+		<colgroup>
+			<col style="min-width:80px; width: 5%;"/>
+			<col style="width: 15%;"/>
+			<col style=""/>
+			<col style="width: 10%;"/>
+			<col style="width: 10%;"/>
+			<col style=""/>
+			<col style="min-width:80px; width: 5%;"/>
+			<col style="min-width:80px; width: 5%;"/>
+		</colgroup>
+		<thead>
+			<tr class="table-dark top">
+				<td>번호</td>
+				<td>브랜드</td>
+				<td>품명</td>
+				<td>품번</td>
+				<td>컬러</td>
+				<td>사이즈</td>
+				<td>정가</td>
+				<td>창고수량</td>
+				<td>매장수량</td>
+				<td>요청수량</td>
+				<td>금액</td>
+			</tr>
+		</thead>
+		<tbody id="detail">		
+			<tr th:each="detail : ${detailData}">
+
+				<input type="hidden" th:name="|ioArr[${detailStat.index}].sCode|" th:value="${detail.sCode}" />
+				<input type="hidden" th:name="|ioArr[${detailStat.index}].bCode|" th:value="${detail.bCode}" />
+				<input type="hidden" th:name="|ioArr[${detailStat.index}].pCode|" th:value="${detail.pCode}" />
+				<input type="hidden" th:name="|ioArr[${detailStat.index}].liPrice|" th:value="${detail.liPrice}" />
+				<input type="hidden" th:name="|ioArr[${detailStat.index}].cnt|" th:value="${detail.cnt}"  />
+				<input type="hidden" th:name="|ioArr[${detailStat.index}].price|" th:value="${detail.price}" />
+
+				<td th:text="${detailStat.count}"></td>
+				<td th:text="${detail.bName}"></td>
+				<td th:text="${detail.pName}"></td>
+				<td th:text="${detail.pNum}"></td>
+				<td th:text="${detail.color}"></td>		
+				<td th:text="${detail.pSize}"></td>
+				<td th:text="${detail.liPrice}"></td>
+				<td th:text="${detail.adminCnt}"></td>
+				<td th:text="${detail.storeCnt}"></td>
+				<td th:text=${detail.cnt}></td>
+	
+<!-- 				<td th:switch="${session.loginStore.auth eq '관리자' && soInfo.proceseRes eq '미처리'}" >
+					<input th:case=${true} type="text" th:name="|ioArr[${detailStat.index}].cnt|" th:value="${detail.cnt}" style="width:50px; " onKeyup="this.value=this.value.replace(/[^-0-9]/g,''); " />
+					<input th:case=${false} type="text" th:name="|ioArr[${detailStat.index}].cnt|" th:value="${detail.cnt}" style="width:50px;" readonly />
+				</td> -->
+
+				<td th:text="${detail.price}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<input type="hidden" th:name="ioStat" th:value="${soInfo.rStat}" />
+	<input type="hidden" th:name="arrival" th:value="${soInfo.sCode}" />
+	<input type="hidden" th:name="totCnt" th:value="${soInfo.statCnt}" />
+	<input type="hidden" th:name="totPrice" th:value="${soInfo.statPrice}" />
+	
+<!-- 	<div class="row justify-content-end">
+		<div class="col-md-2"><button formaction="reject">거절</button></div>		
+		<div class="col-md-2"><button type="submit">승인</button></div>
+	</div> -->
+</form>

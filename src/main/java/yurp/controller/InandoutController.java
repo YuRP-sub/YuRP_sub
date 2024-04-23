@@ -56,10 +56,10 @@ public class InandoutController {
 
 		mm.addAttribute("storeList",inandoutmapper.storeList());
 		
-		if(templateData.getService() == "list") {
-			mm.addAttribute("inandoutData",inandoutmapper.list(dto));
-			mm.addAttribute("totData",inandoutmapper.tot(dto));			
-		}		
+		mm.addAttribute("inandoutData",inandoutmapper.list(dto));
+		mm.addAttribute("totData",inandoutmapper.tot(dto));			
+//		if(templateData.getService() == "list") {
+//		}		
 		
 		return "template";
 	}
