@@ -1,7 +1,29 @@
 
+<style>
+	.dashBtn{
+		height: 200px;
+		background-color:#0d6efd;
+		border-radius: 20px;
+		text-align: center;
+		cursor: pointer;
+	}
+	.dashBtn b{
+		line-height: 200px;
+		
+		font-size: 42px;
+		font-weight: bold;
+		color: #fff;
+		
+	}
+</style>
 
-요기는 대시보드 
-박거누가 점령했따  
- <span th:text="${session.loginStore}"/>
- 
- <div></div>
+
+<div class="row g-3 justify-content-around" style="margin-top: 80px">
+	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/notice/list"'><b>공지사항</b></div>
+	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/stock/sales/list"'><b>상품판매현황</b></div>
+	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/stock/inandout/list"'><b>입/출고 관리</b></div>
+	<div th:if="${session.loginStore.auth eq '관리자' || session.loginStore.auth eq '매장' }" class="dashBtn col-md-5 mb-3" onclick='location.href="/storeOrder/list"'><b>매장 수주/발주</b></div>
+	<div th:if="${session.loginStore.auth eq 'AS'}" class="dashBtn col-md-8" onclick='location.href="/notice/list"'><b>AS 진행 현황</b></div>
+
+</div>
+

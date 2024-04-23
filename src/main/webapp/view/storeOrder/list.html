@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YuRP</title>
+
 <style>	
-	section {
+/* 	section {
 		width: 100%;
 		max-width: 1200px;
 		margin: auto;
@@ -52,11 +47,9 @@
 	}
 	.dataRow.active input[type="text"]{
 		display: inline;
-	}
+	} */
 	
-
 </style>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 $(function(){
 	$(".list").click(function(){
@@ -68,20 +61,16 @@ $(function(){
 		        , data: { rStat: rStat }
 		        , dataType : 'html'
 		        , success: function(data) {
-		        	$("#detail").html(data);
+		        	$("#popup").html(data);
 		          }
 		  });	
 	})		
 })
 </script>
-</head>
-<body>
-<h1>매장에서 본사로 요청</h1>
 
-<section>
+<h2>매장 발주 목록</h2>
 
 	<form action="">
-
 		<div class="searchBox container mb-3 border-bottom">
 			<div class="row g-3 align-items-center">		
 				<div class="col-md-auto">			
@@ -104,12 +93,12 @@ $(function(){
 					</div>
 				</div>
 				<div class="col-md-auto">				
-						<div class="col-md-auto">				
-					<div class="input-group">
-						<span class="input-group-text">전표번호</span>
-						<input type="text" class="form-control" name="rStat" placeholder=""/>
+					<div class="col-md-auto">				
+						<div class="input-group">
+							<span class="input-group-text">발주번호</span>
+							<input type="text" class="form-control" name="rStat" placeholder=""/>
+						</div>
 					</div>
-				</div>
 				</div>	
 			</div>
 			<div class="row justify-content-end align-items-center">
@@ -122,8 +111,6 @@ $(function(){
 		</div>
 	</form>
 	
-	
-	<!-- 테이블은 이런식으로?  -->
 	<div class="tableBox mb-3">
 		<table class="table table-striped-columns">
 			<colgroup>
@@ -136,64 +123,30 @@ $(function(){
 			</colgroup>
 			<thead>
 				<tr class="table-dark top">
-					<td>발주일</td>
-					<td>매장</td>
-					<td>전표번호</td>
+					<td>요청일</td>
+					<td>요청매장</td>
+					<td>발주번호</td>
 					<td>수량</td>
 					<td>금액</td>
 					<td>처리현황</td>
 				</tr>
 			</thead>
 			<tbody>		
-			 	<tr th:each="list : ${listData}">
+			 	<tr th:each="list : ${listData}" th:if="${session.loginStore.sCode eq list.sCode || session.loginStore.auth eq '관리자' }">
 					<td th:text="${#dates.format(list.requestDate, 'yyyy/M/dd')}"></td>
-					<td th:text="${list.sCode}"></td>
+					<td th:text="${list.sName}"></td>
 					<td><a th:text="${list.rStat}" class="list"/></td>
 					<td th:text="${list.statCnt}"></td>
 					<td th:text="${list.statPrice}"></td>
 					<td th:text="${list.proceseRes}"></td>
-			</tr>
-				
-			</tbody>
-		</table>
-	</div>
-</section>
-
-<section>
-
-	<div class="tableBox mb-3">
-		<table class="table table-striped-columns">
-			<colgroup>
-				<col style="min-width:80px; width: 5%;"/>
-				<col style="width: 15%;"/>
-				<col style=""/>
-				<col style="width: 10%;"/>
-				<col style="width: 10%;"/>
-				<col style=""/>
-				<col style="min-width:80px; width: 5%;"/>
-				<col style="min-width:80px; width: 5%;"/>
-			</colgroup>
-			<thead>
-				<tr class="table-dark top">
-					<td>번호</td>
-					<td>브랜드</td>
-					<td>품번</td>
-					<td>컬러</td>
-					<td>사이즈</td>
-					<td>품명</td>
-					<td>매장수량</td>
-					<td>창고수량</td>
-					<td>요청수량</td>
 				</tr>
-			</thead>
-			<tbody id="detail">		
-				<!-- 상세정보 -->
 				
 			</tbody>
-	
 		</table>
 	</div>
+
+
+	<div id="popup" class="tableBox mb-3">
+		
+	</div>
 	
-</section>
-</body>
-</html>

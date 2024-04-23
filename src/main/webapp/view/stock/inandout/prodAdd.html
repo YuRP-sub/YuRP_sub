@@ -46,56 +46,10 @@
 
 <script th:inline="javascript">
 $(function(){
-/*     $("#btn").on("click",function(){
-    
-    	var arr = [];
-    	
-        $("tbody tr").each(function(i){
-            var tr = $(this);
-            var chk = tr.find("input[type='checkbox']:checked");
-            var chkRow = chk.closest('tr');
-            var chkProd = chkRow.find("td[id='pCode']").text()
-            if (reqCntValue !== "") {
-                var obj = {                   
-                    pCode: tr.find("td[id='pCode']").text()
-                };
-                arr.push(obj);
-            }
-            
-            
-            
-        });
-        // 부모 함수 호출s
-        window.opener.setList(arr);
-        window.close();
-    }); */
-    
 });
 
 function chked(){
-/* 	var arr = "";
-	$("input[type='checkbox']:checked").each(function(i){
-    	pCode = $(this).closest('tr').find("td[id='pCode']").text();
-    	arr += pCode+','
-		
-	})
-	arr = arr.substring(0,arr.lastIndexOf(','));
-   	console.log('arr: ',arr)
-   	const dt = {
-		"key": arr
-	}
-   	$.ajax({
-           url: "add",
-           type: "GET",
-           data: dt,
-           success: function(res){
-        	   window.opener.addList(res);
-        	   window.close();
-           },
-           error: function(){
-               alert("실패");
-           }
-       }); */
+
 	var arr = "";
 	
     $("input[type='checkbox']:checked").each(function(i){
@@ -121,6 +75,7 @@ function chked(){
 <h3>[[${session.loginStore.sName}]] 보유재고 검색</h3>
 <form action="">
 <input class="form-control" type="hidden" id="startInput" name="start" th:value="${param.start}" readonly/>
+
 	<div class="searchBox container mb-3 border-bottom">
 		<div class="row justify-content-between align-items-center">	
 			<div class="row g-3 col-md-11 mb-2">	

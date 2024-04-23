@@ -17,4 +17,5 @@ public class DTOs {
 	ArrayList<InvenDTO> invenArr;
 	
 	ArrayList<StoreDTO> storeArr;
+	
 }
