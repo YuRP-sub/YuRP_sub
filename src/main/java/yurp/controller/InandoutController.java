@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +55,10 @@ public class InandoutController {
 	@RequestMapping("{service}")
 	String sellList(Model mm, InandoutDTO dto,TemplateData templateData, HttpServletRequest request) {
 		templateData.setCate("stock/inandout");
+		System.out.println(dto);
+		HttpSession session = request.getSession();
+		StoreDTO logDTO = (StoreDTO)session.getAttribute("loginStore");
+		String logID = logDTO.getSCode();
 
 		mm.addAttribute("storeList",inandoutmapper.storeList());
 		
@@ -65,12 +70,7 @@ public class InandoutController {
 		return "template";
 	}
 	
-	
-	@RequestMapping("detail")
-	String viewDetail(Model mm, InandoutDTO dto) {
-		mm.addAttribute("viewDetail", inandoutmapper.viewDetail(dto));
-		return "stock/inandout/detail";
-	}
+
 	
 	@GetMapping("prodAdd")
 	void prodAdd(Model mm, HttpServletRequest request) {
@@ -110,6 +110,28 @@ public class InandoutController {
 			inandoutmapper.calcInven(dtos.getIoArr());
 			templateData.setMsg("출고전표가 등록되었습니다.");
 			templateData.setGoUrl("list");
+		}
+		return "inc/alert";
+	}
+	
+	
+	
+	@RequestMapping("detail")
+	String viewDetail(Model mm, @RequestParam String ioStat) {
+		System.out.println(inandoutmapper.detail(ioStat));
+		mm.addAttribute("ioInfo", inandoutmapper.getIO(ioStat));
+		mm.addAttribute("viewDetail", inandoutmapper.detail(ioStat));
+		return "stock/inandout/detail";
+	}
+	
+	@RequestMapping("{service}/{ioStat}")
+	String serviceStat(Model mm, @PathVariable String ioStat, InandoutDTO dto, TemplateData templateData) {
+		switch(templateData.getService()) {
+		case "reject":
+			System.out.println("거절해여");
+			templateData.setMsg("입고를 거절하였습니다.");
+			templateData.setGoUrl("/stock/inandout/list");
+			break;
 		}
 		return "inc/alert";
 	}

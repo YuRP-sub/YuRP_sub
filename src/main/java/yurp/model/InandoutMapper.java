@@ -28,28 +28,30 @@ public interface InandoutMapper {
 			+ "	<trim prefix=' ' suffixOverrides = 'and | or'> "
 			
 			+ "		<if test='ioStat != null and ioStat != \"\"' > "
-			+ "			io_stat like concat('%',#{ioStat},'%') and"
+			+ "			io_stat like concat('%',#{ioStat},'%') and "
 			+ "		</if> "
 			+ "		<if test='type != null and type != \"\"' > "
-			+ "			type like concat('%',#{type},'%') and"
+			+ "			type like concat('%',#{type},'%') and "
 			+ "		</if> "
 			
 			+ "		<if test='process != null and process != \"\"' > "
-			+ "			process = #{process} and"
+			+ "			process = #{process} and "
 			+ "		</if> "
 			
 			+ "		<if test='sday != null and sday != \"\"' > "
-			+ "			reg_date >= #{sday} and"
+			+ "			reg_date >= #{sday} and "
 			+ "		</if> "
 			
-			+ "		<if test='sName != null and sName != \"\"' > "
-			+ "			start like concat('%',#{sName},'%') or "
-			+ "			arrival like concat('%',#{sName},'%') and "
+			+ "		<if test='start != null and start != \"\"' > "
+			+ "			start = #{start} and "
+			+ "		</if> "
+			+ "		<if test='arrival != null and arrival != \"\"' > "
+			+ "			arrival = #{arrival}  and "
 			+ "		</if> "
 
 			
 			+ "		<if test='eday != null and eday != \"\"' > "
-			+ "			 #{eday} >= reg_date and"
+			+ "			 #{eday} >= reg_date and "
 			+ "		</if> "
 			
 			+ "		<if test='sday != null and sday != \"\" and eday != null and eday != \"\"' > "
@@ -122,13 +124,27 @@ public interface InandoutMapper {
 			+ "left join store as d on a.s_code = d.s_code "
 			+ "left join inandout as e on a.io_stat = e.io_stat "
 			+ "<where>"
-			+ "		<if test='search != null and search != \"\"' > "
-			+ " 		a.io_stat = #{search} "
-			+ "		</if> "
+			+ " a.io_stat = #{ioStat} "
+
 			+ "</where> "
 			+ "</script> "
 			 )
-	List<InandoutDTO> viewDetail(InandoutDTO dto);
+	List<InandoutDTO> viewDetail(String ioStat);
+	
+	@Select("select i.*, s.s_name as start_name, s2.s_name as arrival_name, "
+			+ "s.manager as start_manager, s2.manager as arrival_manager"			
+			+ " from inandout as i "
+			+ "join store s on i.start = s.s_code "
+			+ "join store s2 on i.arrival = s2.s_code "
+			+ "where io_stat = #{ioStat}")
+	InandoutDTO getIO(String ioStat);
+	
+	@Select("select i.*, p.*, b.b_name "
+			+ "from iodetail i "
+			+ "join product p on i.p_code = p.p_code "
+			+ "join brand b on i.b_code = b.b_code "
+			+ "where i.io_stat = #{ioStat}")
+	List<InandoutDTO> detail(String ioStat);
 	
 	
 	@Select("select * from store where s_code != 'as'")

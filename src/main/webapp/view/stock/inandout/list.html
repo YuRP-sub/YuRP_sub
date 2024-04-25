@@ -1,44 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>입출고</title>
-</head>
-<style>
- 	section {
-		width: 100%;
-		max-width: 1200px;
-		margin: auto;
-	}
-	.scr{
-		border: 1px solid #fff;
-		width: 1200px;
-		height: 450px;
-		overflow-y: scroll;
-	}
-	.tableBox {
-		width: 100%;
-		max-height: 600px;
-		overflow: auto;
-	}
-	.table > thead{
-		position: sticky;
-		top:0;
-	}
-	
-	.table > tfoot{
-		position: sticky;
-		bottom: -1px;
-	}
 
+<style>
+	#popup{
+		visibility: hidden;
+		position: fixed;
+		top:50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		background-color: #fff;
+		border-radius: 10px;
+		z-index: 9999;	
+	}
+	#popupBg {
+		visibility: hidden;
+		position: fixed;
+		width: 100%;
+		height: 100vh;
+		top:0%;
+		left: 0%;
+		z-index: 9998;
+		background-color: rgba(0,0,0,0.5);	
+		backdrop-filter: blur(2px);
+	}
+	#popup.active,
+	#popupBg.active{
+		visibility: visible;
+	}
 </style>
 <script>
 $(function(){
 	let openWin;
 	
-	$('#startSearch').on("click",function(e){
-		
+	$('#startSearch').on("click",function(e){	
 		e.preventDefault();
 		let popUrl = "../inandout/sCodeSearch";
 		let popOption = "width = 650px, height=550px, top=300px, left=300px, scrollbars=yes";
@@ -46,35 +38,52 @@ $(function(){
 		window.open(popUrl,"매장",popOption);
 		
 	});
-
-	$("#list tr").on("click",function(e){
-		var row = $(this);
-		var rowData = row.find('td').map(function(){
-			return $(this).text();
-		}).get()[2];
-		console.log(rowData);
-		
-		e.preventDefault();
-		let popUrl = "../inandout/detail?search="+rowData;
-		let popOption = "width = 1000px, height=550px, top=300px, left=300px, scrollbars=yes";
-		openWin = window.open(popUrl,"전표상세",popOption); 
-		//openWin.opener.rowData = rowData;
-		
-	});
-
 	
+	
+	$(".dataRow").hover(function(){
+		$(this).toggleClass('table-primary');
+		$(this).css('cursor','pointer');
+		
+	})
+	
+	$(".dataRow").click(function(){
+		var ioStat = $(this).find('.ioStat').text();
+		
+		console.log(ioStat)
+		
+		$.ajax({
+			type: 'post',
+			url: '../inandout/detail',
+			data: {ioStat : ioStat},
+			dataType: 'html',
+			success: function(data){
+				$("#popup").html(data);
+	        	$("#popupBg, #popup").addClass('active');
+			},
+			error: function(request, status, error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+	})
+	
+
+
 })
 
+
+function closePop(){
+	$("#popupBg, #popup").removeClass('active');
+}
 </script>
-<body>
-<h1>입출고</h1>
-<section>
+
+<h2 class="title row mt-5 mb-5 p-2 justify-content-center">입/출고 목록</h2>
+
 <form action="">
 	<div class="searchBox container mb-3 border-bottom">
 		<div class="row g-3 align-items-center">		
 			<div class="col-md-auto">			
 				<div class="input-group">
-					<span class="input-group-text">입출고날짜</span>
+					<span class="input-group-text">등록일자</span>
 					<input type="date" class="form-control" name="sday">
 					<div class="px-2"> ~ </div> 
 					<input type="date" class="form-control" name="eday">
@@ -89,31 +98,34 @@ $(function(){
 			<div class="col-md-auto">			
 				<div class="input-group">
 					<span class="input-group-text">입출고</span>
-						<select class="form-select" name="type">
-	                        <option value="" selected disabled hidden>입출고 선택</option>
-	                        	<option value="매장출고">매장출고</option>
-								<option value="시즌반품">시즌반품</option>
-								<option value="입고불량반품">입고불량반품</option>
-								<option value="기타반품">기타반품</option>
-								<option value="본사지시RT">본사지시RT</option>
-								<option value="매장요청RT">매장요청RT</option>
-	                    </select>
+					<select class="form-select" name="type">
+                        <option value="" selected disabled hidden>입출고 선택</option>
+                        	<option value="매장출고">매장출고</option>
+                        	<option value="매장요청발주">매장요청발주</option>
+							<option value="시즌반품">시즌반품</option>
+							<option value="입고불량반품">입고불량반품</option>
+							<option value="기타반품">기타반품</option>
+							<option value="본사지시RT">본사지시RT</option>
+							<option value="매장요청RT">매장요청RT</option>
+                    </select>
 				</div>
 			</div>				
 			<div class="col-md-auto">			
 				<div class="input-group">
 					<span class="input-group-text">처리여부</span>
-						<select class="form-select" name="rStat">
+						<select class="form-select" name="process">
 	                        <option value="" selected disabled hidden>처리여부 선택</option>
-	                        <option value="처리">처리</option>
 	                        <option value="미처리">미처리</option>
+	                        <option value="승인">승인</option>
+	                        <option value="거절">거절</option>
 	                    </select>
 				</div>
 			</div>			
-			<div class="col-md-auto">				
-				<div class="input-group">
-					<span class="input-group-text">매장</span>
-						<select class="form-select" name="sName">
+			<th:block th:if="${session.loginStore.auth eq '관리자'}"> 
+				<div class="col-md-auto">				
+					<div class="input-group">
+						<span class="input-group-text">출발매장</span>
+						<select class="form-select" name="start">
 	                        <option value="" selected disabled hidden>매장 선택</option>
 	                        <option value="admin">본사</option>
 	                        <option value="yurp001">강남그린점</option>
@@ -121,8 +133,28 @@ $(function(){
 	                        <option value="yurp003">용인점</option>
 	                        <option value="yurp004">송파아울렛점</option>
 	                    </select>
+					</div>
+					
 				</div>
-			</div>											
+				<div class="col-md-auto">	
+					<div class="input-group">
+						<span class="input-group-text">도착매장</span>
+						<select class="form-select" name="arrival">
+	                        <option value="" selected disabled hidden>매장 선택</option>
+	                        <option value="admin">본사</option>
+	                        <option value="yurp001">강남그린점</option>
+	                        <option value="yurp002">굽은다리점</option>
+	                        <option value="yurp003">용인점</option>
+	                        <option value="yurp004">송파아울렛점</option>
+	                    </select>
+					</div>
+				</div>
+				<!-- <th:block th:case="매장">
+					<input type="hidden" name="start" th:value="${session.loginStore.sCode}" />										
+					<input type="hidden" name="arrival" th:value="${session.loginStore.sCode}" />										
+				</th:block> -->
+			
+			</th:block>
 		</div>
 		<div class="row justify-content-end align-items-center">
 			<div class="col-auto mb-3">				
@@ -149,9 +181,9 @@ $(function(){
 			<thead>
 				<tr class="table-dark">
 					<td>번호</td>
-					<td>등록날짜</td>
+					<td>등록일자</td>
 					<td>전표번호</td>
-					<td>상태</td>
+					<td>출고유형</td>
 					<td>출발매장</td>
 					<td>도착매장</td>
 					<td>총수량</td>
@@ -160,37 +192,49 @@ $(function(){
 				</tr>
 			</thead>
 			<tbody>
-			 	<tr th:each="dto : ${inandoutData}" >
-					<td th:text="${dto.ioNo}"></td>
-					<td th:text="${dto.regDate}"></td>
-					<td th:text="${dto.ioStat}"></td>
-					<td th:text="${dto.type}"></td>
-					<th:block th:each="st : ${storeList}">
-					<td th:if="${dto.start eq st.sCode}" th:text="${st.sName}"></td>
-					<td th:if="${dto.arrival eq st.sCode}" th:text="${st.sName}"></td>
+				<th:block th:switch="${session.loginStore.auth}" >
+					<th:block th:case="관리자">
+					 	<tr class="dataRow" th:each="dto : ${inandoutData}" >
+							<td th:text="${dto.ioNo}"></td>
+							<td th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></td>
+							<td class="ioStat" th:text="${dto.ioStat}"></td>
+							<td th:text="${dto.type}"></td>
+							<th:block th:each="st : ${storeList}">
+							<td th:if="${dto.start eq st.sCode}" th:text="${st.sName}"></td>
+							</th:block>
+							<th:block th:each="st : ${storeList}">
+							<td th:if="${dto.arrival eq st.sCode}" th:text="${st.sName}"></td>
+							</th:block>
+							
+							<td th:text="${dto.totCnt}"></td>
+							<td th:text="${#numbers.formatInteger(dto.totPrice, 3, 'COMMA')}"></td>
+							<td th:text="${dto.process}"></td>
+						</tr> 
 					</th:block>
-					<td th:text="${dto.totCnt}"></td>
-					<td th:text="${#numbers.formatInteger(dto.totPrice, 3, 'COMMA')}"></td>
-					<td th:text="${dto.process}"></td>
-				</tr> 
+					<th:block th:case="매장">
+					 	<tr class="dataRow" th:each="dto : ${inandoutData}" th:if="${dto.start eq session.loginStore.sCode || dto.arrival eq session.loginStore.sCode}">
+							<td th:text="${dto.ioNo}"></td>
+							<td th:text="${dto.regDate}"></td>
+							<td class="ioStat" th:text="${dto.ioStat}"></td>
+							<td th:text="${dto.type}"></td>
+							<th:block th:each="st : ${storeList}">
+							<td th:if="${dto.start eq st.sCode}" th:text="${st.sName}"></td>
+							</th:block>
+							<th:block th:each="st : ${storeList}">
+							<td th:if="${dto.arrival eq st.sCode}" th:text="${st.sName}"></td>
+							</th:block>
+							
+							<td th:text="${dto.totCnt}"></td>
+							<td th:text="${#numbers.formatInteger(dto.totPrice, 3, 'COMMA')}"></td>
+							<td th:text="${dto.process}"></td>
+						</tr> 
+					</th:block>
+				</th:block>
 			</tbody>
-			<tfoot class="table-group-divider">
-				<tr class="tot table-secondary" th:each="dto2 : ${totData}">
-					<td>통계</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td th:text="${dto2.totCnt}"></td>
-					<td th:text="${#numbers.formatInteger(dto2.totPrice, 3, 'COMMA')}"></td>
-					<td></td>
-				</tr>
-			</tfoot>
+
 		</table>
 	</div>
-	</form>
-</section>
+</form>
 
-</body>
-</html>
+<div id="popup" class="tableBox container-lg pl-3 pr-3 shadow">	</div>
+<div id="popupBg" onclick="closePop();"></div>	

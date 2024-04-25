@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,26 +62,14 @@ public class StoreOrderController {
 		templateData.setCate("storeOrder");
 		
 		System.out.println(templateData.getService());
+		
+		mm.addAttribute("slist",mapper.slist());
+		
 		switch(templateData.getService()) {
 		case "list":
 			mm.addAttribute("listData",mapper.list(dto));
 			break;			
 		case "request":
-//			String st = "";
-//			if(mapper.maxStat() != null) {
-//				String [] arr =  mapper.maxStat().split("-");
-//				int stat = Integer.parseInt(arr[1])+1;
-//				if(stat> 9){
-//					st = "00"+stat;
-//				}else{
-//					st = "000"+stat;
-//				}
-//			}else {
-//				st = "0001";
-//			}
-//			
-//			mm.addAttribute("stat",st);
-			mm.addAttribute("slist",mapper.slist());
 			mm.addAttribute("plist",mapper.plist());
 			break;
 		}
@@ -93,7 +82,7 @@ public class StoreOrderController {
 	@RequestMapping("detail")
 	String detail(Model model, @RequestParam String rStat) {
 		System.out.println(rStat);
-
+		model.addAttribute("slist",mapper.slist());
 		model.addAttribute("soInfo", mapper.getSO(rStat));
 		model.addAttribute("detailData",mapper.detail(rStat));
 		return "storeOrder/detail";
@@ -155,8 +144,8 @@ public class StoreOrderController {
 	
 	
 	
-	@RequestMapping({"insertReg"})
-	String ioReg(Model mm, DTOs dtos, StoreOrderDTO dto, TemplateData templateData) {
+	@RequestMapping({"insertReg","accept"})
+	String ioReg(Model mm, DTOs dtos, StoreOrderDTO dto, InandoutDTO dtoIO, TemplateData templateData) {
 		System.out.println("rtDto : "+dto);
 		System.out.println("rtDTOs : "+dtos.getRtArr());
 		switch(templateData.getService()) {
@@ -165,7 +154,36 @@ public class StoreOrderController {
 			mapper.insertSODetail(dtos.getRtArr());
 			templateData.setMsg("발주요청이 등록되었습니다.");
 			templateData.setGoUrl("list");
+			break;
+		case "accept":
+//			System.out.println("승인 dto : "+dtoIO);
+//			System.out.println("승인 dtos : "+dtos.getIoArr());
+			mapper.accept(dtoIO.getIoStat()); // 발주요청 승인처리
+			mapper.insertSOtoIO(dtoIO); // 출고전표 등록
+			mapper.insertSOtoIoDetail(dtos.getIoArr(), dtoIO.getIoStat());	// 출고디테일 입력
+			mapper.calcInven(dtos.getIoArr());// 재고 조정 (본사는 보유재고 뺴기, 요청매장은 이동재고 더하기)
+			templateData.setMsg("매장요청발주를 승인하였습니다.");
+			templateData.setGoUrl("list");
+			break;
 		}
 		return "inc/alert";
 	}
+	
+	
+	@RequestMapping("{service}/{rStat}")
+	String serviceStat(Model mm, @PathVariable String rStat, StoreOrderDTO dto, TemplateData templateData) {
+		System.out.println("rStat : "+rStat);
+		
+		switch(templateData.getService()) {
+		case "reject":
+			mapper.reject(rStat);
+			templateData.setMsg("매장요청발주를 거절하였습니다.");
+			templateData.setGoUrl("/storeOrder/list");
+			break;
+		}
+		
+		return "inc/alert";
+	}
+
+	
 }

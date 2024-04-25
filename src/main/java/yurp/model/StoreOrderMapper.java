@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface StoreOrderMapper {
@@ -195,7 +196,68 @@ public interface StoreOrderMapper {
 		,"</script>"
 	})
 	int insertSODetail(ArrayList<StoreOrderDTO> arr);
+	
+	@Update({
+		" <script> "
+		,"update rt set "
+		,"procese_res = '거절' "
+		, "where "
+		, "r_stat = #{rStat}; "
+		, "</script> "
+	})
+	int reject(String rStat);
+	
+	@Update({
+		" <script> "
+		,"update rt set "
+		,"procese_res = '승인' "
+		, "where "
+		, "r_stat = #{rStat}; "
+		, "</script> "
+	})
+	int accept(String rStat);
+	
+	
+	@Insert({
+		"<script> "
+		,"insert into inandout "
+		, "(io_stat, type, start, arrival, tot_price, tot_cnt, process, s_code) values "
+		, "<if test='arrival != null'> "
+		, "(#{ioStat}, '매장요청발주', 'admin', "
+		, "#{arrival}, #{totPrice}, #{totCnt}, '미처리', 'admin') "
+		, "</if>"
+		, "</script>"})
+	int insertSOtoIO(InandoutDTO dtoIO);
+	
+	@Insert({
+		"<script>"
+		,"insert into iodetail "
+		,"(io_stat, price, cnt, b_code, p_code, s_code) values "
+		, "<foreach collection='arr' item='prod' separator=',' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		, "(#{ioStat}, #{prod.price}, #{prod.cnt}, #{prod.bCode}, #{prod.pCode}, 'admin') "
+		, "</if>"
+		, "</foreach>"
+		,"</script>"
+	})
+	int insertSOtoIoDetail(ArrayList<InandoutDTO> arr, String ioStat);
 
+	
+	@Insert({
+		"<script>"
+		, "<foreach collection='arr' item='prod' separator=' ' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		,"update inventory set "
+		,"mov_cnt=#{prod.cnt} "
+		, "where s_code=#{prod.sCode} and p_code=#{prod.pCode}; "
+		,"update inventory set "
+		,"cnt=#{prod.resCnt} "
+		, "where s_code='admin' and p_code=#{prod.pCode}; "
+		, "</if>"
+		, "</foreach>"
+		,"</script>"
+	})
+	int calcInven(ArrayList<InandoutDTO> arr);
 }
 
 

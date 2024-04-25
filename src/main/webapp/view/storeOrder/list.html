@@ -1,55 +1,33 @@
 
-<style>	
-/* 	section {
+<style>
+	#popup{
+		visibility: hidden;
+		position: fixed;
+		top:300px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: #fff;
+		border-radius: 10px;
+		z-index: 9999;	
+	}
+	#popupBg {
+		visibility: hidden;
+		position: fixed;
 		width: 100%;
-		max-width: 1200px;
-		margin: auto;
+		height: 100vh;
+		top:0%;
+		left: 0%;
+		z-index: 9998;
+		background-color: rgba(0,0,0,0.5);	
+		backdrop-filter: blur(2px);
 	}
-	.scr{
-		border: 1px solid #fff;
-		width: 1200px;
-		height: 450px;
-		overflow-y: scroll;
+	#popup.active,
+	#popupBg.active{
+		visibility: visible;
 	}
-	.tableBox {
-		width: 100%;
-		max-height: 600px;
-		overflow: auto;
-		text-align:center;
-	}
-	.table > thead{
-		position: sticky;
-		top:0;
-	}
-	
-	.table > tfoot{
-		position: sticky;
-		bottom: -1px;
-	}
-	
-	.table input[type="text"]{
-		
-		width: 100%;
-		border: none;
-		background-color: transparent;
-		display: none;
-	}
-	.table input[type="checkbox"]{
-		cursor: pointer;
-	}
-	
-	.dataRow span{
-		display: inline-block;
-		width: 100%;
-	}
-	.dataRow.active span{
-		display: none;
-	}
-	.dataRow.active input[type="text"]{
-		display: inline;
-	} */
-	
 </style>
+
+
 <script>
 $(function(){
 	$(".list").click(function(){
@@ -62,10 +40,15 @@ $(function(){
 		        , dataType : 'html'
 		        , success: function(data) {
 		        	$("#popup").html(data);
+		        	$("#popupBg, #popup").addClass('active');
 		          }
 		  });	
 	})		
 })
+
+function closePop(){
+	$("#popupBg, #popup").removeClass('active');
+}
 </script>
 
 <h2>매장 발주 목록</h2>
@@ -136,8 +119,8 @@ $(function(){
 					<td th:text="${#dates.format(list.requestDate, 'yyyy/M/dd')}"></td>
 					<td th:text="${list.sName}"></td>
 					<td><a th:text="${list.rStat}" class="list"/></td>
-					<td th:text="${list.statCnt}"></td>
-					<td th:text="${list.statPrice}"></td>
+					<td th:text="|${#numbers.formatInteger(list.statCnt, 0, 'COMMA')}|"></td>
+					<td th:text="|${#numbers.formatInteger(list.statPrice, 0, 'COMMA')} 원|"></td>
 					<td th:text="${list.proceseRes}"></td>
 				</tr>
 				
@@ -146,7 +129,6 @@ $(function(){
 	</div>
 
 
-	<div id="popup" class="tableBox mb-3">
-		
-	</div>
+	<div id="popup" class="tableBox container-lg p-3 shadow">	</div>
+	<div id="popupBg" onclick="closePop();"></div>	
 	
