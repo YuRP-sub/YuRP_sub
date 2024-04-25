@@ -1,32 +1,30 @@
 package yurp.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import yurp.model.TemplateData;
 
 @Controller
-@RequestMapping("/{cate}")
 public class TemplateController {
+
 	
-//	@ModelAttribute
-//	TemplateData templateData(TemplateData data) {
-//		
-//		System.out.println("fbbdf:"+data);
-//		return data;
-//	}
-//
-//	@RequestMapping(value = {
-//			"/",
-//			"{service}", 
-//			"/{service}/{no}", 
-//			"/{service}/{code}", 
-//			"{subCate}/{service}", 
-//			"{subCate}/{service}/{no}", 
-//			"{subCate}/{service}/{code}"})
-//	String viewTotal() {
-//		System.out.println("viewTotal");
-//		return "template";
-//	}
+	@RequestMapping("over")
+	String over(Model mm, TemplateData templateData) {
+		
+		templateData.setMsg("세션 만료");
+		templateData.setGoUrl("/index");
+		
+		return "inc/alert";
+	}
+	
+	@RequestMapping("noauth")
+	String noauth(Model mm, TemplateData templateData) {
+		
+		templateData.setMsg("접근권한이 없습니다");
+		templateData.setGoUrl("/index");
+		
+		return "inc/alert";
+	}
 }
