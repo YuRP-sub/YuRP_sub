@@ -442,7 +442,7 @@ function setPrice(n){
 				<div class="row col-md-10">
 					<div class="col-md-auto">				
 						<div class="input-group">
-							<span class="input-group-text">등록일자</span>
+							<span class="input-group-text">요청일자</span>
 							<span th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"  class="form-control"></span>
 						</div>
 					</div>
@@ -516,23 +516,23 @@ function setPrice(n){
 			</thead>
 			<tbody class="prod"></tbody>
 			<tfoot class="table-group-divider">
-					<tr class="tot table-secondary">
-						<td>통계</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td id="resCnt" style="color:var(--bs-blue); font-weight:bold">0</td>
-						<td id="resPrice" style="color:var(--bs-blue); font-weight:bold">0 원</td>
-					</tr>
+				<tr class="tot table-secondary">
+					<td>통계</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td id="resCnt" style="color:var(--bs-blue); font-weight:bold">0</td>
+					<td id="resPrice" style="color:var(--bs-blue); font-weight:bold">0 원</td>
+				</tr>
 
-				</tfoot>
+			</tfoot>
 		</table>
 	</div>
 	<div class="row justify-content-between align-items-center">
