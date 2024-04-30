@@ -93,21 +93,25 @@
 					<td>시즌</td>
 					<td>사이즈</td>
 					<td>컬러</td>
-					<td>재고량</td>
 					<td>정가</td>
 					<td>판매가</td>
+					<th:block th:each="stnm : ${stData}">
+						<td th:text="${stnm.sName}"></td>
+					</th:block>
 				</tr>
 			</thead>
 			<tbody>
 			 	<tr th:each="dto : ${invenData}" >
-					<td th:text="${dto.iNo}"></td>
-					<td th:text="${dto.pName}"></td>
-					<td th:text="${dto.season}"></td>
-					<td th:text="${dto.pSize}"></td>
-					<td th:text="${dto.color}"></td>
-					<td th:text="${dto.cnt}"></td>
-					<td th:text="${#numbers.formatInteger(dto.liPrice, 3, 'COMMA')}"></td>
-					<td th:text="${#numbers.formatInteger(dto.pPrice, 3, 'COMMA')}"></td>
+			 		<td th:text="${dtoStat.index + 1}"></td>
+					<td th:text="${dto.value.pName}"></td>
+					<td th:text="${dto.value.season}"></td>
+					<td th:text="${dto.value.pSize}"></td>
+					<td th:text="${dto.value.color}"></td>
+					<td th:text="${dto.value.liPrice}"></td>
+					<td th:text="${dto.value.pPrice}"></td>
+					<th:block th:each="cnt : ${dto.value.ppSum}">
+						<td th:text="${cnt.value}"></td>
+					</th:block>
 				</tr> 
 			</tbody>
 			<tfoot class="table-group-divider">

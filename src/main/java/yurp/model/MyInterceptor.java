@@ -15,6 +15,7 @@ public class MyInterceptor implements HandlerInterceptor {
 		
 		StoreDTO id = (StoreDTO)request.getSession().getAttribute("loginStore");
 		
+		
 		if(id == null) {
 			response.sendRedirect("/over");
 			
