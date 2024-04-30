@@ -12,55 +12,131 @@
 		background-size: 100px 100px;
 
 	}
-	#closeBtnBox {
+	.btnBox {
 		position: sticky;
 		top: 0px;
 		background-color: #fff;
+		z-index: 999;
 	}
+	
+	.btnBox > .fnBtns{
+		position: absolute;
+		top: 50px;
+		padding-left: 40px;
+		background-color: #fff;
+	}
+	
+	@media print{
+		html, body { -webkit-print-color-adjust:exact; width: 210mm; height: 297mm; }
+	    table { page-break-inside:auto; }
+	    tr    { page-break-inside:avoid; page-break-after:auto; }
+	    thead { display:table-header-group; }
+	    tfoot { 
+	    display:table-footer-group; 
+	    
+	    }
+		header{
+		display: none;
+		}
+		main{
+		display: none;
+		}
+		.btnBox {
+			visibility: hidden;
+		}
+		.tableBox{
+			max-height: none;
+		}
+		.table > tfoot{
+			position: initial;
+			display: table-row-group;
+		}
+		.col-md-4.ioStat {
+			max-width: 400px;
+		}
+		
+		#popup {
+			position: relative;
+		    max-width: 100%;
+		    width: 100%;
+		    height: auto;
+		    max-height: none;
+		    top: 0;
+		    left: 0;
+		    transform: none;
+		    box-shadow: none !important;
+		}
+		#popup .table tr > td:nth-of-type(2),
+		#popup .table tr > td:nth-of-type(3),
+		#popup .table tr > td:nth-of-type(6){
+			display:none;
+		}
+		
+		#popupBg {
+			display:none ; 			
+		}	
+		
+	}
+	
 </style>
-<script th:inline="javascript">
-	$(function(){
-		/* $('#startSign').css('background-image','url(/sign/'+[[${ioInfo.start}]]+'.png)'); */
-	})
-</script>
 
-<div id="closeBtnBox"  class="row justify-content-end align-items-center mb-3">
-	<div class="btn col-md-auto p-3" onclick="closePop();">
+
+<div class="btnBox row justify-content-end align-items-center mb-3">
+
+	<div class="fnBtns pb-3 pl-5 d-flex gap-3" th:if="${ioInfo.process eq '승인'}">
+		<div id="printBtn" class="btn btn-outline-danger col-md-auto" onclick="window.print()">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+			  <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"></path>
+			  <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1"></path>
+			</svg>
+			프린트 하기
+		</div>
+		<a id="excelBtn" class="btn btn-success col-md-auto" th:href="|excel/${ioInfo.ioStat}|">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+			  <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"></path>
+			  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"></path>
+			</svg>
+			엑셀 내려받기		
+		</a>
+	</div>
+	<div id="closeBtn" class="btn col-md-auto p-3" onclick="closePop();">
 		<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
 		  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
 		</svg>
 	</div>
 </div>
+
 	
-<div class="paper">
+<div id="paper">
 	<h2 class="title row mt-5 mb-5 p-2 justify-content-center">입/출고 전표</h2>
-	<div class="row g-3 justify-content-end mb-3">
-	
-		<div class="col-md-auto">
+	<div class="row justify-content-end mb-3">
+		<div class="col-md-4 ioStat">
 			<div class="input-group">
 				<span class="input-group-text">전표번호</span>
 				<span class="form-control"  th:text="${ioInfo.ioStat}"></span>
 			</div>
 		</div>
+	</div>
+	<div class="d-flex gap-3 flex-nowrap justify-content-end mb-3">
 		<div class="col-md-auto">
 			<div class="input-group">
 				<span class="input-group-text">등록일자</span>
 				<span class="form-control" th:text="${#dates.format(ioInfo.regDate, 'yyyy-MM-dd')}"></span>
 			</div>
 		</div>
-		<div class="col-md-auto">
+		<div class="col-md-2">
 			<div class="input-group">
 				<span class="input-group-text">출고점</span>
 				<span class="form-control" th:text="${ioInfo.startName}"/>
 			</div>
 		</div>
-		<div class="col-md-auto">
+		<div class="col-md-2">
 			<div class="input-group">
 				<span class="input-group-text">입고점</span>
 				<span class="form-control" th:text="${ioInfo.arrivalName}"/>
 			</div>
 		</div>
-		<div class="col-md-auto">
+		<div class="col-md-2">
 			<div class="input-group">
 				<span class="input-group-text">처리여부</span>
 				<span class="form-control" th:text="${ioInfo.process}"/>
@@ -70,7 +146,10 @@
 	
 	</div>
 	
-	<form action="">
+	<form action="accept">
+	
+		<input type="hidden" th:name="ioStat" th:value="${ioInfo.ioStat}" />
+
 		<div class="tableBox mb-3">
 			<table id="data" class="table table-striped-columns border border-light-subtle">
 				<colgroup>
@@ -105,7 +184,16 @@
 					</tr>
 				</thead>
 				<tbody>
-				 	<tr th:each="dto : ${viewDetail}" >
+				 	<tr th:each="dto : ${viewDetail}" >        
+				 		<input type="hidden" th:name="|ioArr[${dtoStat.index}].start|" 	 th:value="${ioInfo.start}" />
+				 		<input type="hidden" th:name="|ioArr[${dtoStat.index}].arrival|" th:value="${ioInfo.arrival}"/>
+						<input type="hidden" th:name="|ioArr[${dtoStat.index}].bCode|" 	 th:value="${dto.bCode}" />
+						<input type="hidden" th:name="|ioArr[${dtoStat.index}].pCode|" 	 th:value="${dto.pCode}" />
+						<input type="hidden" th:name="|ioArr[${dtoStat.index}].liPrice|" th:value="${dto.liPrice}" />
+						<input type="hidden" th:name="|ioArr[${dtoStat.index}].cnt|" 	 th:value="${dto.cnt}"  />
+						<input type="hidden" th:name="|ioArr[${dtoStat.index}].price|" 	 th:value="${dto.price}" />
+						
+				 		                                       
 				 		<td th:text="${dtoStat.count}"></td>
 						<td th:text="${dto.bName}"></td>
 						<td th:text="${dto.season}"></td>
@@ -155,19 +243,15 @@
 					<th:block th:case="미처리">
 						<div id="arrivalSign" class="signBg">(인)</div>
 					</th:block>
-					<th:block th:case="거절">
-					<div id="arrivalSign" class="signBg" style="font-weight: bold; color: #f00;">거절완료</div>
-					</th:block>
 					<th:block th:case="승인">
 					<div id="arrivalSign" class="signBg" th:style="|background-image: url(/view/sign/${ioInfo.arrival}.png)|">(인)</div>
 					</th:block>
 				</th:block>
 			</div>		
 		</div>
-		<div class="d-flex gap-3 mb-5 justify-content-end" th:if="${session.loginStore.sCode eq ioInfo.arrival}">
-			<div id="acceptBtn" class="btn btn-primary col-md-3" style="width: 100px;">승인</div>
-			<a id="rejectBtn" th:href="|reject/${ioInfo.ioStat}|" class="btn btn-danger col-md-3" style="width: 100px;">거절</a>
-		</th:block>
+		<div class="d-flex gap-3 mb-5 justify-content-end" th:if="${session.loginStore.sCode eq ioInfo.arrival && ioInfo.process eq '미처리'}">
+			<input type="submit" id="acceptBtn" class="btn btn-primary col-md-3" style="width: 100px;" value="승인"/>
+		</div>
 	</form>
 
 </div>

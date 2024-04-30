@@ -69,13 +69,13 @@
 		<tbody id="detail">		
 			<tr th:each="detail : ${detailData}">
 
-				<input type="hidden" th:name="|ioArr[${detailStat.index}].sCode|" th:value="${detail.sCode}" />
-				<input type="hidden" th:name="|ioArr[${detailStat.index}].bCode|" th:value="${detail.bCode}" />
-				<input type="hidden" th:name="|ioArr[${detailStat.index}].pCode|" th:value="${detail.pCode}" />
-				<input type="hidden" th:name="|ioArr[${detailStat.index}].liPrice|" th:value="${detail.liPrice}" />
-				<input type="hidden" th:name="|ioArr[${detailStat.index}].cnt|" th:value="${detail.cnt}"  />
-				<input type="hidden" th:name="|ioArr[${detailStat.index}].price|" th:value="${detail.price}" />
-				<input type="hidden" th:name="|ioArr[${detailStat.index}].resCnt|" th:value="${detail.adminCnt - detail.cnt}" />
+					<input type="hidden" th:name="|ioArr[${detailStat.index}].sCode|" th:value="${detail.sCode}" />
+					<input type="hidden" th:name="|ioArr[${detailStat.index}].bCode|" th:value="${detail.bCode}" />
+					<input type="hidden" th:name="|ioArr[${detailStat.index}].pCode|" th:value="${detail.pCode}" />
+					<input type="hidden" th:name="|ioArr[${detailStat.index}].liPrice|" th:value="${detail.liPrice}" />
+					<input type="hidden" th:name="|ioArr[${detailStat.index}].cnt|" th:value="${detail.cnt}"  />
+					<input type="hidden" th:name="|ioArr[${detailStat.index}].price|" th:value="${detail.price}" />
+					<input type="hidden" th:name="|ioArr[${detailStat.index}].resCnt|" th:value="${detail.adminCnt - detail.cnt}" />
 
 				<td th:text="${detailStat.count}"></td>
 				<td th:text="${detail.bName}"></td>
