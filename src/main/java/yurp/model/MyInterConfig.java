@@ -21,6 +21,7 @@ public class MyInterConfig implements WebMvcConfigurer {
 		registry.addInterceptor(myInterceptor)
 		.addPathPatterns("/**")
 		.excludePathPatterns("/index")
+		.excludePathPatterns("/")
 		.excludePathPatterns("/over")
 		.excludePathPatterns("/inc/alert")
 		.excludePathPatterns("/dashboard");

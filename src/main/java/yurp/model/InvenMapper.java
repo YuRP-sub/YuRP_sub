@@ -1,5 +1,6 @@
 package yurp.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -7,6 +8,82 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface InvenMapper {
+	
+	
+	@Select("select distinct ${vv} from inventory")
+	ArrayList<String> invenCode(String vv);
+	
+	@Select("select * from product where p_code = #{vv} ")
+	InvenDTO productDetail(String vv);
+	
+	@Select("<script>"
+			+ "select distinct "
+			+ "a.p_code "
+			+ "from inventory as a "
+			+ "left join product as b on a.p_code = b.p_code "
+			+ "<where>"
+			+ "	<trim prefix=' ' suffixOverrides = 'and | or'> "
+			+ "		<if test='season != null and season != \"\"' > "
+			+ "			b.season like concat('%',#{season},'%') and"
+			+ "		</if> "
+			+ "		<if test='pName != null and pName != \"\"' > "
+			+ "			b.p_name like concat('%',#{pName},'%') and"
+			+ "		</if> "
+			+ "		<if test='pSize != null and pSize != \"\"' > "
+			+ "			b.p_size like concat('%',#{pSize},'%') and "
+			+ "		</if> "
+			+ "		<if test='color != null and color != \"\"' > "
+			+ "			b.color like concat('%',#{color},'%') "
+			+ "		</if> "
+			+ "	</trim>"
+			+ "</where> "
+			+ "</script> ")	
+	ArrayList<String> pSearch(InvenDTO dto);
+	
+	@Select("select "
+			+ "p_code, "
+			+ "s_code, " 
+			+ "sum(cnt) as s_cnt "
+			+ "from inventory  "
+			+ "where s_code = #{s_code} "
+			+ "group by p_code, s_code ")
+	ArrayList<InvenSCntDTO> invenS_Cnt(String s_code);
+	
+//	@Select("<script>"
+//			+ "select "
+//			+ "a.p_code, "
+//			+ "a.s_code, "
+//			+ "sum(a.cnt) as s_cnt "
+//			+ "from inventory as a "
+//			+ "left join product as b on a.p_code = b.p_code "
+//			+ "<where>"
+//			+ "	<trim prefix=' ' suffixOverrides = 'and | or'> "
+//			+ " 		s_code = #{s_code} and "
+//			+ "		<if test='season != null and season != \"\"' > "
+//			+ "			b.season like concat('%',#{season},'%') and"
+//			+ "		</if> "
+//			+ "		<if test='pName != null and pName != \"\"' > "
+//			+ "			b.p_name like concat('%',#{pName},'%') and"
+//			+ "		</if> "
+//			
+//			+ "		<if test='pSize != null and pSize != \"\"' > "
+//			+ "			b.p_size like concat('%',#{pSize},'%') and "
+//			+ "		</if> "
+//			
+//			+ "		<if test='color != null and color != \"\"' > "
+//			+ "			b.color like concat('%',#{color},'%') "
+//			+ "		</if> "
+//			
+//			+ "	</trim>"
+//			+ "</where> "
+//			+ "group by a.p_code, a.s_code"
+//			+ "</script> "
+//			)
+//	ArrayList<InvenSCntDTO> invenS_Cnt(String s_code);
+	
+	
+	//@Select(ttt)
+	//List<InvenDTO> list22(InvenDTO dto);
 
 	@Select("<script>"
 			+ "select "
@@ -54,6 +131,14 @@ public interface InvenMapper {
 			+ "</script> "
 			 )
 	List<InvenDTO> list(InvenDTO dto);
+	
+	
+	@Select("select "
+			+ "s_name "
+			+ "from store "
+			+ "where s_name not in ('as센터') "
+			)
+	List<InvenDTO> stList(InvenDTO dto);
 	
 	
 //	@Select("<script> "
