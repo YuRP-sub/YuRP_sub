@@ -10,12 +10,15 @@
 <title>YuRP</title>
 </head>
 <style>	
+ 	body.popOn {
+ 		overflow: hidden;
+ 		padding-right: 15px;
+ 	}
 	input[type="checkbox"]{
 		cursor: pointer;
 	}
 	section {
 		width: 100%;
-		max-width: 1200px;
 		margin: auto;
 	}
 	.tableBox {
@@ -41,7 +44,7 @@
 </style>
 <body>
 
-
+<div id="bodyContent">
  	<th:block th:switch="${session.loginStore.auth}">
 		<th:block th:case="관리자">
 			<th:block th:replace="inc/header :: headerAdmin"/>
@@ -59,6 +62,8 @@
  	<main class="container-lg mt-3 pt-5">
 		<th:block th:replace="|${templateData.cate}/${templateData.service}|"></th:block>
 	</main>
-
+	<div id="popup" class="tableBox container-lg pl-3 pr-3 shadow">	</div>
+	<div id="popupBg" onclick="closePop();"></div>	
+</div>
 </body>
 </html>

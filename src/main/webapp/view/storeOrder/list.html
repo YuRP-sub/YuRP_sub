@@ -30,8 +30,16 @@
 
 <script>
 $(function(){
-	$(".list").click(function(){
-		var rStat = $(this).text();
+	$(".dataRow").hover(function(){		
+		$(this).toggleClass('table-primary');
+		$(this).css('cursor','pointer');
+		
+	})
+	$(".dataRow").mouseleave(function(){
+		$(this).removeClass('table-primary');
+	})
+	$(".dataRow").click(function(){
+		var rStat = $(this).find('.rStat').text();
 		console.log(rStat)
 		  $.ajax({
 		          type: 'post'
@@ -115,10 +123,10 @@ function closePop(){
 				</tr>
 			</thead>
 			<tbody>		
-			 	<tr th:each="list : ${listData}" th:if="${session.loginStore.sCode eq list.sCode || session.loginStore.auth eq '관리자' }">
+			 	<tr class="dataRow" th:each="list : ${listData}" th:if="${session.loginStore.sCode eq list.sCode || session.loginStore.auth eq '관리자' }">
 					<td th:text="${#dates.format(list.requestDate, 'yyyy/M/dd')}"></td>
 					<td th:text="${list.sName}"></td>
-					<td><a th:text="${list.rStat}" class="list"/></td>
+					<td th:text="${list.rStat}" class="rStat"></td>
 					<td th:text="|${#numbers.formatInteger(list.statCnt, 0, 'COMMA')}|"></td>
 					<td th:text="|${#numbers.formatInteger(list.statPrice, 0, 'COMMA')} 원|"></td>
 					<td th:text="${list.proceseRes}"></td>

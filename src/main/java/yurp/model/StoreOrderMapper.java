@@ -248,7 +248,7 @@ public interface StoreOrderMapper {
 		, "<foreach collection='arr' item='prod' separator=' ' index='i'>"
 		, "<if test='prod.pCode != null'>"
 		,"update inventory set "
-		,"mov_cnt=#{prod.cnt} "
+		,"mov_cnt= (mov_cnt + #{prod.cnt}) "
 		, "where s_code=#{prod.sCode} and p_code=#{prod.pCode}; "
 		,"update inventory set "
 		,"cnt=#{prod.resCnt} "

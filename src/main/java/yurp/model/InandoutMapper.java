@@ -243,7 +243,7 @@ public interface InandoutMapper {
 		, "<foreach collection='arr' item='prod' separator=' ' index='i'>"
 		, "<if test='prod.pCode != null'>"
 		,"update inventory set "
-		,"mov_cnt=#{prod.cnt} "
+		,"mov_cnt= (mov_cnt + #{prod.cnt}) "
 		, "where s_code=#{prod.arrival} and p_code=#{prod.pCode}; "
 		,"update inventory set "
 		,"cnt=#{prod.resCnt} "
@@ -265,6 +265,52 @@ public interface InandoutMapper {
 		, "</script> "
 	})
 	int removeCnt(ArrayList<InandoutDTO> arr);
+	
+	@Update(
+		"<script>"
+		+ "update inandout set "
+		+ "process = '거절' "
+		+ "where io_stat = #{ioStat} "
+		+ "</script>")
+	int reject(String ioStat);
+	
+	
+	@Update({
+		"<script>"
+		, "<foreach collection='arr' item='prod' separator=' ' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		,"update inventory set "
+		,"cnt = (cnt + #{prod.cnt}) "
+		, "where s_code=#{prod.start} and p_code=#{prod.pCode}; "
+		,"update inventory set "
+		,"mov_cnt= (mov_cnt - #{prod.resCnt}) "
+		, "where s_code=#{prod.arrival} and p_code=#{prod.pCode}; "
+		, "</if>"
+		, "</foreach>"
+		,"</script>"})
+	int rejCalcInven(ArrayList<InandoutDTO> arr);
+	
+	@Update(
+		"<script>"
+		+ "update inandout set "
+		+ "process = '승인' "
+		+ "where io_stat = #{ioStat} "
+		+ "</script>")
+	int accept(String ioStat);
+	
+	
+	@Update({
+		"<script>"
+		, "<foreach collection='arr' item='prod' separator=' ' index='i'>"
+		, "<if test='prod.pCode != null'>"
+		,"update inventory set "
+		,"mov_cnt=(mov_cnt - #{prod.cnt}), "
+		,"cnt=(cnt + #{prod.cnt}) "
+		, "where s_code=#{prod.arrival} and p_code=#{prod.pCode}; "
+		, "</if>"
+		, "</foreach>"
+		,"</script>"})
+	int acceptCalcInven(ArrayList<InandoutDTO> arr);
 
 	
 }
