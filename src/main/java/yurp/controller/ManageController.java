@@ -2,6 +2,7 @@ package yurp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import yurp.model.StoreDTO;
 import yurp.model.StoreMapper;
 import yurp.model.TemplateData;
@@ -63,26 +65,40 @@ public class ManageController {
 		return "inc/alert";
 	}
 	
+	@RequestMapping("insert")
+	String joinForm(StoreDTO dto,TemplateData templateData) {
+		System.out.println("insert 실행");
+		return "template";
+	}
 
-	@RequestMapping({"insertReg","modify/modifyReg"})
-	String manageReg(Model mm, StoreDTO dto, TemplateData templateData) {
-		switch(templateData.getService()) {
-		case "insertReg":
+	@PostMapping("insertReg")
+	String manageInsertReg( @Valid StoreDTO dto,BindingResult res,TemplateData templateData) {
+		
+		if(res.hasErrors()) {
+			System.out.println("insertReg에러-------------");
+			//return "/manage/insert";
+			templateData.setCate("manage");
+			templateData.setService("insert");
+			return "template";
+		}else {
 			mapper.insert(dto);
 			templateData.setMsg("등록되었습니다.");
 			templateData.setGoUrl("list");
-			break;
-		case "modifyReg":
-			System.out.println("modiregDTO : "+dto);
-			System.out.println("modireg 왔");
-			mapper.modify(dto);
-			templateData.setMsg("수정되었습니다.");
-			templateData.setGoUrl("/manage/list");
-			break;
+			return "inc/alert";
 		}
-
+		
+	}
+	
+	@RequestMapping("modify/modifyReg")
+	String managemodifyReg(@Valid StoreDTO dto,TemplateData templateData, BindingResult res) {
+		
+		mapper.modify(dto);
+		templateData.setMsg("수정되었습니다.");
+		templateData.setGoUrl("/manage/list");
+		
 		return "inc/alert";
 	}
+	
 	
 //	@GetMapping("delete/{sNo}")
 //	String delete(@PathVariable int sNo) {
