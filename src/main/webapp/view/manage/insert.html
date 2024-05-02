@@ -69,12 +69,13 @@
 	<fieldset class="row mb-4 align-items-center">
     	<legend class="col-form-label col-sm-4 pt-0">매장등급</legend>
 	    <div class="col-sm-8">
-	        <select class="form-select form-select-lg" aria-label="Large select example" name="grade" required>
-				  <option selected disabled hidden>매장등급 선택</option>
+	        <select class="form-select form-select-lg" aria-label="Large select example" name="grade">
+				  <option value="0" selected hidden>매장등급 선택</option>
 				  <option value="1">스페셜</option>
 				  <option value="2">일반</option>
 				  <option value="3">아울렛</option>
 			</select>
+	    <div class="err" th:if="${#fields.hasErrors('grade')}" th:errors="*{grade}" ></div>
 	    </div>
 	</fieldset>
 

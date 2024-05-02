@@ -109,7 +109,8 @@
 </script>
 <h2 class="title row mt-5 mb-5 p-2 justify-content-center">매장 수정</h2>
 
-<form class="mb-5 pb-5" action="modifyReg" method="post" th:object="${dto}">
+<form class="mb-5 pb-5" action="modifyReg" method="post" th:object="${storeDTO}">
+<input type="hidden" th:field="*{sNo}">
 <div class="joinForm p-5 border border-4 border-secondary rounded-5">
 	<fieldset class="row mb-4 align-items-center">
     	<legend class="col-form-label col-sm-4 pt-0">권한설정</legend>
@@ -138,61 +139,62 @@
 	<fieldset class="row mb-4 align-items-center">
     	<legend class="col-form-label col-sm-4 pt-0">매장등급</legend>
 	    <div class="col-sm-8">
-	        <select class="form-select form-select-lg" aria-label="Large select example" name="grade" required>
-				  <option selected disabled hidden>매장등급 선택</option>
+	        <select class="form-select form-select-lg" aria-label="Large select example" name="grade">
+				  <option value="0" selected hidden>매장등급 선택</option>
 				  <option value="1">스페셜</option>
 				  <option value="2">일반</option>
 				  <option value="3">아울렛</option>
 			</select>
+			<div class="err" th:if="${#fields.hasErrors('grade')}" th:errors="*{grade}" ></div>
 	    </div>
 	</fieldset>
 
 	<div class="row mb-4 align-items-center">
 	    <label for="sName" class="col-form-label col-sm-4">매장명</label>
 	    <div class="col-sm-8 has-validation">
-	      <input type="text" class="form-control form-control-lg " id="sName" name="sName"/>
+	      <input type="text" class="form-control form-control-lg " id="sName" name="sName" th:field="*{sName}" />
 	  	  <div class="err" th:if="${#fields.hasErrors('sName')}" th:errors="*{sName}" ></div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
 	    <label for="sCode" class="col-form-label col-sm-4">매장코드</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="sCode" name="sCode" placeholder="매장코드(계정) 입력 "  />
+	      <input type="text" class="form-control form-control-lg " id="sCode" name="sCode" placeholder="매장코드(계정) 입력 " th:field="*{sCode}" readonly />
 	      <div class="err" th:if="${#fields.hasErrors('sCode')}" th:errors="*{sCode}" ></div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
 	    <label for="sPw" class="col-form-label col-sm-4">비밀번호</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="sPw" name="sPw" placeholder="비밀번호 입력" />
+	      <input type="text" class="form-control form-control-lg " id="sPw" name="sPw" placeholder="비밀번호 입력" th:field="*{sPw}" />
 	      <div class="err"  th:if="${#fields.hasErrors('sPw')}" th:errors="*{sPw}" ></div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
 	    <label for="manager" class="col-form-label col-sm-4">담당자</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="manager" name="manager" placeholder="담당자 입력"/>
+	      <input type="text" class="form-control form-control-lg " id="manager" name="manager" placeholder="담당자 입력" th:field="*{manager}"/>
 	      <div class="err" th:if="${#fields.hasErrors('manager')}" th:errors="*{manager}" ></div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
 	    <label for="tel" class="col-form-label col-sm-4">연락처</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="tel" name="tel" placeholder="ex) 010-1234-1234" />
+	      <input type="text" class="form-control form-control-lg " id="tel" name="tel" placeholder="ex) 010-1234-1234" th:field="*{tel}" />
 	      <div class="err" th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}" ></div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
 	    <label for="addr" class="col-form-label col-sm-4">매장주소</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="addr" name="addr" placeholder="매장주소 입력"/>
+	      <input type="text" class="form-control form-control-lg " id="addr" name="addr" placeholder="매장주소 입력" th:field="*{addr}"/>
 	      <div class="err"  th:if="${#fields.hasErrors('addr')}" th:errors="*{addr}" ></div>
 	    </div>
 	</div>
 	<div class="row mb-5 align-items-center">
 	    <label for="email" class="col-form-label col-sm-4">이메일</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="email" name="email" placeholder="ex) yurp@yurp.com" />
+	      <input type="text" class="form-control form-control-lg " id="email" name="email" placeholder="ex) yurp@yurp.com" th:field="*{email}" />
 	      <div class="err" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></div>
 	    </div>
 	</div>	

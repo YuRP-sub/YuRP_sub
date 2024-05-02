@@ -53,7 +53,7 @@ public class ManageController {
 		System.out.println("service no :"+templateData.getService());
 		switch(templateData.getService()) {
 		case "modify":			
-			mm.addAttribute("dto",mapper.detail(no));
+			mm.addAttribute("storeDTO",mapper.detail(no));
 			return "template";
 			
 		case "delete":
@@ -90,13 +90,21 @@ public class ManageController {
 	}
 	
 	@RequestMapping("modify/modifyReg")
-	String managemodifyReg(@Valid StoreDTO dto,TemplateData templateData, BindingResult res) {
+	String managemodifyReg(@Valid StoreDTO dto, BindingResult res, TemplateData templateData) {
 		
-		mapper.modify(dto);
-		templateData.setMsg("수정되었습니다.");
-		templateData.setGoUrl("/manage/list");
-		
-		return "inc/alert";
+		if(res.hasErrors()) {
+			System.out.println("modifyReg에러-------------" +dto);
+			templateData.setCate("manage");
+			templateData.setService("modify");
+			//mm.addAttribute("dto",dto);
+			return "template";
+		}else {
+			mapper.modify(dto);
+			templateData.setMsg("수정되었습니다.");
+			templateData.setGoUrl("/manage/list");
+			
+			return "inc/alert";
+		}
 	}
 	
 	
