@@ -2,6 +2,7 @@ package yurp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import yurp.model.SellDTO;
 import yurp.model.SellMapper;
 import yurp.model.TemplateData;
@@ -19,48 +21,18 @@ public class SellController {
 	
 	@Resource
 	SellMapper sellmapper;
-	
-	//@ModelAttribute
-//	TemplateData templateData(TemplateData data, HttpServletRequest request) {
-//		
-//		String uri = request.getRequestURI();
-//		String service = uri.substring(uri.lastIndexOf("/")+1);
-//		
-//		//System.out.println("temp-service :"+service);
-//		
-//		data.setCate("stock");
-//		data.setSubCate("sales");
-//		data.setService(service);
-//		System.out.println("templateData:"+data);
-//		
-//		return data;
-//	}
-	
-	
-	
+
 
 	@RequestMapping("{service}")  ///list, inserForm
-	String service(Model mm, SellDTO dto, TemplateData templateData) {
+	String service(Model mm,SellDTO dto, TemplateData templateData) {
 		
-		//templateData.setCate("stock");
-		//templateData.setSubCate("sales");
 		templateData.setCate("stock/sales");
 		
-//		TemplateData templateData = new TemplateData();
-//		templateData.setSubCate("sales");
-//		templateData.setService("list");
-//		
-//		mm.addAttribute("templateData",templateData);
+
+		mm.addAttribute("sellData",sellmapper.list(dto));
+		mm.addAttribute("totData",sellmapper.tot(dto));
 		
-//		switch(templateData.getService()) {
-//		case "list":
-			mm.addAttribute("sellData",sellmapper.list(dto));
-			mm.addAttribute("totData",sellmapper.tot(dto));
-//			break;
 		
-//		}
-		
-		//return "stock/sales/list";
 		return "template";
 	}
 	

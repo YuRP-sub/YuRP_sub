@@ -23,6 +23,7 @@ public class MyInterConfig implements WebMvcConfigurer {
 		.excludePathPatterns("/index")
 		.excludePathPatterns("/")
 		.excludePathPatterns("/over")
+		.excludePathPatterns("/logout")
 		.excludePathPatterns("/inc/alert")
 		.excludePathPatterns("/dashboard")
 		.excludePathPatterns("/css/**")

@@ -45,10 +45,6 @@ public interface SellMapper {
 			+ "			a.sell_date >= #{start} and "
 			+ "		</if> "
 			
-//			+ "		<if test='start = null and start = \"\"' > "
-//			+ "			a.sell_date >= '2024-04-21' and "
-//			+ "		</if> "
-			
 			+ "		<if test='end != null and end != \"\"' > "
 			+ "			 #{end} >= a.sell_date and"
 			+ "		</if> "

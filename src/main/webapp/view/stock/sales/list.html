@@ -169,13 +169,16 @@ $(function(){
 					<td></td>
 					<td></td>
 					<td></td>
-					<td th:text="${#numbers.formatInteger(dto2.allTot, 3, 'COMMA')}"></td>
+					<th:block th:if="${dto2!=null}">
+						<td th:text="${#numbers.formatInteger(dto2.allTot, 3, 'COMMA')}"></td>
+					</th:block>
+					<th:block th:unless="${dto2!=null}">
+						<td>0</td>
+					</th:block>
 				</tr>
 			</tfoot>
 		</table>
 	</div>
 	</form>
-	
-	<!-- <a href="insertForm">글쓰기</a> -->
 </section>
 
