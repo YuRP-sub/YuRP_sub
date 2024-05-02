@@ -35,6 +35,7 @@ public interface StoreOrderMapper {
 			+ "		</if> "
 			+ "	</trim>"
 			+ "</where> "
+			+ "order by request_date desc "
 			+ "</script> ")
 	List<StoreOrderDTO> list(StoreOrderDTO dto);
 	

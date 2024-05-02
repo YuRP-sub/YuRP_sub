@@ -59,6 +59,7 @@ public interface InandoutMapper {
 			+ "		</if> "
 			+ "	</trim>"
 			+ "</where> "
+			+ "order by reg_date desc"
 			+ "</script> "
 			 )
 	List<InandoutDTO> list(InandoutDTO dto);
