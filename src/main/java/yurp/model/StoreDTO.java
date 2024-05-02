@@ -1,5 +1,7 @@
 package yurp.model;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -7,6 +9,8 @@ import lombok.Data;
 @Data
 public class StoreDTO {
 	Integer sNo;
+	
+	@Min(value = 1,message  = "매장등급을 선택하세요")
 	Integer grade;
 	
 	@NotEmpty(message  = "매장명을 입력하세요")
