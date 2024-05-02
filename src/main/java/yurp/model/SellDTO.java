@@ -7,9 +7,11 @@ import lombok.Data;
 public class SellDTO {
 	
 	int sellNo, liPrice, discount, pPrice, cnt, totPrice,allTot,sNo,
-	grade,pNo;
-	String start,end,pCode, pNum, sCode, addr, sName,
-	color, pSize, season, pName, sellDate, manager;
+
+	grade,pNo, resPrice, resCnt;
+	String start,end,pCode, pNum, sCode, sName, addr, 
+	color, pSize, season, pName, sellDate, manager, bCode, bName;
+
 	
 }
 

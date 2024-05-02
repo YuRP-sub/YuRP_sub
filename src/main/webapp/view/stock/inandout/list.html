@@ -208,7 +208,7 @@ function closePop(){
 				<th:block th:switch="${session.loginStore.auth}" >
 					<th:block th:case="관리자">
 					 	<tr class="dataRow" th:each="dto : ${inandoutData}" >
-							<td th:text="${dto.ioNo}"></td>
+							<td th:text="${dtoStat.size - dtoStat.index}"></td>
 							<td th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></td>
 							<td class="ioStat" th:text="${dto.ioStat}"></td>
 							<td th:text="${dto.type}"></td>
@@ -226,7 +226,7 @@ function closePop(){
 					</th:block>
 					<th:block th:case="매장">
 					 	<tr class="dataRow" th:each="dto : ${inandoutData}" th:if="${dto.start eq session.loginStore.sCode || dto.arrival eq session.loginStore.sCode}">
-							<td th:text="${dto.ioNo}"></td>
+							<td th:text="${dtoStat.size - dtoStat.index}"></td>
 							<td th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></td>
 							<td class="ioStat" th:text="${dto.ioStat}"></td>
 							<td th:text="${dto.type}"></td>
