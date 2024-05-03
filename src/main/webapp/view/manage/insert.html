@@ -35,7 +35,93 @@
 			}
 			
 		})
+		
+		
+		if($('#sCode').hasClass('is-valid')){
+			console.log('요요')
+		}
 	})
+	
+	function chkSCode(n){
+		console.log(n.value)
+		var sCode = $(n).val();
+		var regex = /^[a-zA-Z0-9]*$/
+		
+		$.ajax({
+			url: 'chkSCode',
+			type:'post',
+			data: {sCode: sCode},
+			success: function(cnt){
+	
+				if(!regex.test(sCode) || sCode ==''){
+					
+					$(n).removeClass('is-valid')
+					$(n).addClass('is-invalid')
+					$('.invalid-feedback.duplicated').css("display","none")
+					$('.valid-feedback.sCode').css("display","none")
+					$('.invalid-feedback.regex').css("display","block")
+					
+					
+				}else{
+					if(cnt == 0){
+						
+						$(n).removeClass('is-invalid')
+						$(n).addClass('is-valid')
+						$('.invalid-feedback.regex').css("display","none")
+						$('.invalid-feedback.duplicated').css("display","none")
+						$('.valid-feedback.sCode').css("display","block")
+						
+					}else{
+					
+						$(n).removeClass('is-valid')
+						$(n).addClass('is-invalid')
+						$('.invalid-feedback.regex').css("display","none")
+						$('.valid-feedback.sCode').css("display","none")
+						$('.invalid-feedback.duplicated').css("display","block")
+						
+					}
+					
+				}
+				
+				if($('#sPw').hasClass('is-valid') && $('#sCode').hasClass('is-valid')){
+					
+					$('#submitBtn').attr('disabled',false);
+				}else{
+					$('#submitBtn').attr('disabled',true);
+				}
+				
+			},
+			error: function(request, status, error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+	}
+	
+	
+	function chkSPw(){
+		
+		var sPw = $('#sPw').val();
+		var sPw2 = $('#sPw2').val();
+		
+		if(sPw2 != sPw || sPw2 == ''){
+			$('#sPw').removeClass('is-valid');
+			$('#sPw').addClass('is-invalid');
+			$('#sPw2').removeClass('is-valid');
+			$('#sPw2').addClass('is-invalid');
+		}else{
+			$('#sPw').removeClass('is-invalid');
+			$('#sPw').addClass('is-valid');
+			$('#sPw2').removeClass('is-invalid');
+			$('#sPw2').addClass('is-valid');
+		}
+		
+		if($('#sPw').hasClass('is-valid') && $('#sCode').hasClass('is-valid')){
+			
+			$('#submitBtn').attr('disabled',false);
+		}else{
+			$('#submitBtn').attr('disabled',true);
+		}
+	}
 </script>
 
 <h2 class="title row mt-5 mb-5 p-2 justify-content-center">매장 등록</h2>
@@ -82,22 +168,33 @@
 	<div class="row mb-4 align-items-center">
 	    <label for="sName" class="col-form-label col-sm-4">매장명</label>
 	    <div class="col-sm-8 has-validation">
-	      <input type="text" class="form-control form-control-lg " id="sName" name="sName"/>
+	      <input type="text" class="form-control form-control-lg " id="sName" name="sName" placeholder="매장명 입력"/>
 	  	  <div class="err" th:if="${#fields.hasErrors('sName')}" th:errors="*{sName}" ></div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
 	    <label for="sCode" class="col-form-label col-sm-4">매장코드</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="sCode" name="sCode" placeholder="매장코드(계정) 입력 "  />
+	      <input type="text" class="form-control form-control-lg " id="sCode" name="sCode" onKeyup="chkSCode(this);" placeholder="매장코드(계정) 영문,숫자 입력 "  />
 	      <div class="err" th:if="${#fields.hasErrors('sCode')}" th:errors="*{sCode}" ></div>
+   	  	  <div class="valid-feedback sCode">사용 가능한 코드</div>
+	  	  <div class="invalid-feedback duplicated">사용 중인 코드</div>
+	  	  <div class="invalid-feedback regex">영문 or 숫자만 입력</div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
 	    <label for="sPw" class="col-form-label col-sm-4">비밀번호</label>
 	    <div class="col-sm-8">
-	      <input type="text" class="form-control form-control-lg " id="sPw" name="sPw" placeholder="비밀번호 입력" />
+	      <input type="password" class="form-control form-control-lg " id="sPw" name="sPw"  onKeyup="chkSPw();" placeholder="비밀번호 입력" />
 	      <div class="err"  th:if="${#fields.hasErrors('sPw')}" th:errors="*{sPw}" ></div>
+	    </div>
+	</div>
+	<div class="row mb-4 align-items-center">
+	    <label for="sPw2" class="col-form-label col-sm-4">비밀번호 확인</label>
+	    <div class="col-sm-8">
+	      <input type="password" class="form-control form-control-lg " id="sPw2" name="sPw2" onKeyup="chkSPw();" placeholder="비밀번호 확인" />
+	      <div class="valid-feedback sPw2">비밀번호 확인 완료</div>
+	      <div class="invalid-feedback sPw2">입력한 비밀번호와 맞지 않습니다.</div>
 	    </div>
 	</div>
 	<div class="row mb-4 align-items-center">
@@ -129,7 +226,7 @@
 	    </div>
 	</div>	
 	<div class="d-flex justify-content-end">
-		<input class="btn btn-lg btn-primary" type="submit" value="등록"/>
+		<input id="submitBtn" class="btn btn-lg btn-primary" type="submit" value="등록" disabled/>
 	</div>
 	
 </div>
