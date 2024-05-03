@@ -62,4 +62,8 @@ public interface StoreMapper {
 	@Select("select * from store where s_code=#{sCode} and s_pw=#{sPw} ")
 	StoreDTO login(StoreDTO dto);
 	
+	
+	@Select("select count(s_code) from store where s_code = #{sCode}")
+	int chkSCode(String sCode);
+	
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -105,6 +107,14 @@ public class ManageController {
 			
 			return "inc/alert";
 		}
+	}
+	
+	@PostMapping("chkSCode")
+	@ResponseBody
+	public int chkSCode(@RequestParam("sCode") String sCode) {
+		int cnt = mapper.chkSCode(sCode);
+		System.out.println(sCode + " : "+ cnt);
+		return cnt;
 	}
 	
 	
