@@ -1,8 +1,27 @@
-
 <script th:inline="javascript">
 	$(function(){		
 		
 	})
+	
+	
+	function submit() {
+		
+		if(cnt() == 0){
+			$('form').submit();
+		}else{
+			alert("이미 존재하는 상품입니다");
+		}
+	}
+	
+	function cnt() {
+		var inval = 0;
+		document.querySelectorAll('input[name*="pCode"]').forEach((element) => {
+			if(element.classList.contains('is-invalid') == true){
+				inval++;
+			}
+		});
+		return inval;
+	}
 	
 	function getCode(n){
 		var pCode = '';
@@ -22,6 +41,26 @@
 		
 		
 		pCode = pNum+color+pSize;
+		
+		
+		$.ajax({
+			type: "post",
+			url: "pCodeChk",
+			data: {pCode: pCode},
+			dataType: 'html',
+			success: function (data) {
+				if(data == 0) {
+					console.log("성공", data)
+					$(target).removeClass('is-invalid');
+					$(target).addClass('is-valid');
+				}else {
+					console.log("실패", data)
+					$(target).removeClass('is-valid');
+					$(target).addClass('is-invalid');
+				}
+			}
+		});
+
 		
 		console.log(season , pNum , pCode)
 		target.val(pCode);
@@ -161,7 +200,7 @@
 <h2 class="title row mt-5 mb-5 p-2 justify-content-center">상품 등록</h2>
 
 <section>
-	<form action="insertReg" method="post">
+	<form action="insertReg" method="post" th:object="${productDTO}">
 		<th:block th:each="st : ${storeData}">		
 			<input type="hidden" th:name="|storeArr[${stStat.index}].sCode|" th:value="${st.sCode}" />			
 		</th:block>
@@ -221,7 +260,6 @@
 						
 						<td>
 							<input type="text" class="form-control" th:name="|prodArr[0].pName|" required />
-						</td>
 						<td>
 							<input type="text" class="form-control" th:name="|prodArr[0].pNum|" onKeyup="getCode(this);" style="text-transform: uppercase;" required />
 						</td>
@@ -273,7 +311,7 @@
 			</div>
 			<div class="col-auto mb-3">								
 					<div id="addBtn" class="btn btn-success" onclick="addRow();">상품추가</div>	
-					<button type="submit" class="btn btn-primary">상품등록 <span id="rowCnt" class="badge text-bg-secondary">1</span></button>
+					<div id="subbtn" class="btn btn-primary" onclick="submit();" >상품등록 <span id="rowCnt" class="badge text-bg-secondary">1</span></div>
 			</div>
 		</div>
 	</form>

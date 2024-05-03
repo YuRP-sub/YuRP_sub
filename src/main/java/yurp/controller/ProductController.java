@@ -5,14 +5,18 @@ import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import yurp.model.BrandDTO;
 import yurp.model.DTOs;
 import yurp.model.ProductDTO;
@@ -101,6 +105,16 @@ public class ProductController {
 		
 		return "inc/alert";
 	}
+	
+	
+   @PostMapping("pCodeChk")
+   @ResponseBody
+   public int chkSCode(@RequestParam("pCode") String pCode) {
+      int data = mapper.codeChk(pCode);
+      System.out.println(pCode + " : "+ data);
+      return data;
+   }
+	
 
 
 //	@PostMapping("delete")

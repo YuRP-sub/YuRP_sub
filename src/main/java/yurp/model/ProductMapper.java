@@ -195,6 +195,15 @@ public interface ProductMapper {
 	})
 	int modReg(ArrayList<ProductDTO> arr);
 	
+	@Select("select exists ( "
+			+ "select  "
+			+ "p_code "
+			+ "from product "
+			+ "where p_code = #{pCode}"
+			+ ") as res")
+	int codeChk(String pcode);
+	
+	
 
 //	
 //	//규휘가 말아보는 상품 검색 
