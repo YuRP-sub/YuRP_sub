@@ -6,17 +6,37 @@
 	
 	function submit() {
 		
-		if(cnt() == 0){
+		if(invalCnt() == 0){
 			$('form').submit();
 		}else{
-			alert("이미 존재하는 상품입니다");
+			alert("상품정보 입력 누락 및 오류");
 		}
 	}
 	
-	function cnt() {
+	function invalCnt() {
 		var inval = 0;
 		document.querySelectorAll('input[name*="pCode"]').forEach((element) => {
-			if(element.classList.contains('is-invalid') == true){
+			if(element.classList.contains('is-invalid') == true || element.value == ''){
+				inval++;
+			}
+		});
+		document.querySelectorAll('select[name*="bCode"]').forEach((element) => {
+			if(element.value == ''){
+				inval++;
+			}
+		});
+		document.querySelectorAll('input[name*="season"]').forEach((element) => {
+			if(element.value == ''){
+				inval++;
+			}
+		});
+		document.querySelectorAll('input[name*="liPrice"]').forEach((element) => {
+			if(element.value == ''){
+				inval++;
+			}
+		});
+		document.querySelectorAll('input[name*="cnt"]').forEach((element) => {
+			if(element.value == ''){
 				inval++;
 			}
 		});
@@ -156,6 +176,8 @@
 			</td>
 			<td>
 				<input type="text" class="form-control" name="prodArr[${cnt}].pCode" onKeyup="getCode(this);" readonly required />
+				<div class="valid-feedback">사용 가능한 상품코드</div>
+			    <div class="invalid-feedback">사용 중인 상품코드.</div>
 			</td>
 			<td>
 				<input type="text" class="form-control" name="prodArr[${cnt}].liPrice" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this);" required />
@@ -271,6 +293,7 @@
 						</td>
 						<td>
 							<input type="text" class="form-control" th:name="|prodArr[0].pCode|" onKeyup="getCode(this);" readonly required />
+			   				<div class="invalid-feedback">사용 중인 상품코드.</div>
 						</td>
 						<td>
 							<input type="text" class="form-control" th:name="|prodArr[0].liPrice|" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');getPrice(this); getResPrice();" required />
